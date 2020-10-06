@@ -4,7 +4,6 @@ function New-FLEXAPIHeader {
         [string] $token
     )
 
-
     $result = @{"Authorization" = "Bearer "+ $token}
 
     return $result
