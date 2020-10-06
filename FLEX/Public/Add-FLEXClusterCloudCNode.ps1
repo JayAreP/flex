@@ -5,7 +5,9 @@ function Add-FLEXClusterCloudCNode {
         [parameter()]
         [int] $count = 1,
         [parameter()]
-        [string] $flexContext = 'FLEXConnect'
+        [string] $flexContext = 'FLEXConnect',
+        [parameter()]
+        [switch] $wait
     )
 
     begin {
@@ -31,7 +33,15 @@ function Add-FLEXClusterCloudCNode {
         $body | Add-Member -MemberType NoteProperty -Name 'cnodes' -Value @($totalCNodes)
         $body | Add-Member -MemberType NoteProperty -Name 'mnodes' -Value @()
 
-        Invoke-FLEXRestCall -method POST -endpoint $endpoint -API $api -body $body
+        $results = Invoke-FLEXRestCall -method POST -endpoint $endpoint -API $api -body $body
+        if ($wait) {
+            $task = $results.items.id
+            Write-FLEXProgress -taskID $task -message "Creating c-node"
+            return $results
+        } else {
+            return $results
+        }
+        
     }
 }
 

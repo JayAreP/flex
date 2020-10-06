@@ -7,7 +7,9 @@ function Move-FLEXClusterCNode {
         [parameter()]
         [string] $targetName = "Free Pool",
         [parameter()]
-        [string] $flexContext = 'FLEXConnect'
+        [string] $flexContext = 'FLEXConnect',
+        [parameter()]
+        [switch] $wait
     )
 
     begin {
@@ -49,6 +51,12 @@ function Move-FLEXClusterCNode {
 
         $results = Invoke-FLEXRestCall -method POST -API $api -endpoint $endpoint -body $o -flexContext $flexContext
 
-        return $results
+        if ($wait) {
+            $task = $results.items.id
+            Write-FLEXProgress -taskID $task -message "Moving c-node"
+            return $results
+        } else {
+            return $results
+        }
     }
 }
