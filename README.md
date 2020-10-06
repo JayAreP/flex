@@ -49,8 +49,8 @@ Get-FLEXTask
 # Show the FLEX networking configuration:
 Get-FLEXClusterNetwork
 
-# Create 2 c-nodes for an existing cluster:
-Get-FLEXCluster | Add-FLEXClusterCloudCNode -count 2
+# Create a c-node for an existing cluster:
+Get-FLEXCluster | Add-FLEXClusterCloudCNode 
 
 # Show all available nodes (those in the free pool)
 Get-FLEXClusterCNodes -showAvailable 

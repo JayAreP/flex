@@ -25,7 +25,7 @@ function Move-FLEXClusterCNode {
 
         if ($sourceName -ne "Free Pool") {
             $sourceSDP = Get-FLEXClusterSDP -name $sourceName
-            $cnode | Add-Member -MemberType NoteProperty -Name "src_k2_id" -Value $sourceSDP.id
+            $cnode | Add-Member -MemberType NoteProperty -Name "src_k2_id" -Value $sourceSDP.k2_id
         } else {
             $cnode | Add-Member -MemberType NoteProperty -Name "src_k2_id" -Value $null
         }
