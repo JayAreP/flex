@@ -62,6 +62,8 @@ Get-FLEXClusterCNodes -showAvailable | Remove-FLEXClusterCloudCNode
 Invoke-FLEXRestCall -method GET -API v1 -endpoint 'pages/nodes'
 ```
 
+### Verbosity:  
+
 Specify -Verbose on any cmdlet to see the entire API process, including endoint declarations, and json statements. You can use this to help model API calls directly or troubleshoot. 
 
 ```powershell
