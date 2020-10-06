@@ -1,15 +1,11 @@
 function New-FLEXAPIHeader {
     param(
         [parameter(mandatory)]
-        [string] $token,
-        [parameter()]
-        [switch] $secure
+        [string] $token
     )
 
-    if ($secure) {
-        $result = @{"Authorization" = "Bearer  "+[System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($token))}
-    } else {
-        $result = @{"Authorization" = "Bearer  "+ $token}
-    }
+
+    $result = @{"Authorization" = "Bearer "+ $token}
+
     return $result
 }
