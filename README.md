@@ -49,10 +49,17 @@ Get-FLEXTask
 # Show the FLEX networking configuration:
 Get-FLEXClusterNetwork
 
+# Create 2 c-nodes for an existing cluster:
+Get-FLEXCluster | Add-FLEXClusterCloudCNode -count 2
+
 # Show all available nodes (those in the free pool)
 Get-FLEXClusterCNodes -showAvailable 
 
 # Move all FLEX Cluster c-node from the free pool to a registered SDP:
+Get-FLEXClusterCNodes -showAvailable | Move-FLEXClusterCNode -targetName "My SDP"
+
+# Invoke a wait on some operations (for better inherit sequencing). For example, this sequence will wait on the c-node to be created prior to the move operation:
+Get-FLEXCluster | Add-FLEXClusterCloudCNode -wait
 Get-FLEXClusterCNodes -showAvailable | Move-FLEXClusterCNode -targetName "My SDP"
 
 # Delete all of the nodes in the free pool
