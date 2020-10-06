@@ -34,17 +34,12 @@ function Invoke-FLEXRestCall {
     $dateNow = get-date
     $dateToken = get-date $context.token.expiresOn
     if ($dateNow -gt $dateToken) {
-        Write-Error "Login session has expired, please reconnect with Connect-FLEX" 
+        $err = "Login session has expired, please reconnect with Connect-FLEX" 
+        return $err | Write-Error
     }
 
     $token = $context.token.access_token
     $baseURI = 'https://' + $context.FLEXEndpoint + '/api/' + $API + '/' + $endpoint 
-
-    $dateNow = get-date
-    $dateToken = get-date $context.token.expiresOn
-    if ($dateNow -gt $dateToken) {
-        Write-Error "Login session has expired, please reconnect with Connect-FLEX" 
-    }
 
     $header = New-FLEXAPIHeader -token $token
     $header | Convertto-json | Write-Verbose
