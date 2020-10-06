@@ -1,13 +1,13 @@
 # Silk Flex PowerShell SDK 
-## Currently I consider this SDK very experimental, and do not recommend use in production deployments without thoroughly testing. The purpose of this module is mostly to demonstrate the API functionality of the FLEX platform, and actually contains very few actionable functions.
-
+### Currently I consider this SDK very experimental, and do not recommend use in production deployments without thoroughly testing. The purpose of this module is mostly to demonstrate the API functionality of the FLEX platform, and actually contains very few actionable functions.
+----
 ### Installation 
 For now, clone this repo and import the module manually via:
 ```powershell
 Import-Module ./path/FLEX/flex.psm1
 ```
 
-Or, run the provided InstallSDP.ps1 script. 
+Or, run the provided InstallFLEX.ps1 script. 
 ```powershell
 Unblock-File .\InstallFLEX.ps1
 .\InstallFLEX.ps1
@@ -49,11 +49,61 @@ Get-FLEXTask
 # Show the FLEX networking configuration:
 Get-FLEXClusterNetwork
 
+# Show all available nodes (those in the free pool)
+Get-FLEXClusterCNodes -showAvailable 
+
 # Move all FLEX Cluster c-node from the free pool to a registered SDP:
 Get-FLEXClusterCNodes -showAvailable | Move-FLEXClusterCNode -targetName "My SDP"
+
+# Delete all of the nodes in the free pool
+Get-FLEXClusterCNodes -showAvailable | Remove-FLEXClusterCloudCNode
 
 # Use the bespoke REST handler for quick REST call modeling:
 Invoke-FLEXRestCall -method GET -API v1 -endpoint 'pages/nodes'
 ```
 
 Specify -Verbose on any cmdlet to see the entire API process, including endoint declarations, and json statements. You can use this to help model API calls directly or troubleshoot. 
+
+```
+Get-FLEXClusterCNodes -showAvailable | Remove-FLEXClusterCloudCNode -Verbose
+VERBOSE: {
+  "Authorization": "Bearer  3q1tMyhtsi1jiC6sFOWSQqBKT00Rg3OD5HustDwYtL6"
+}
+VERBOSE: {
+  "node_type": "cnode",
+  "node_id": "flex-cluster-1001-cnode-4",
+  "cluster_id": "1001"
+}
+VERBOSE: POST https://54.102.19.180/api/v1/tasks/remove_from_freepool with 96-byte payload
+VERBOSE: received 1142-byte response of content type application/json
+VERBOSE: Content encoding: utf-8
+
+VERBOSE: {
+  "Authorization": "Bearer  3q1tMyhtsi1jiC6sFOWSQqBKT00Rg3OD5HustDwYtL6"
+}
+VERBOSE: {
+  "node_type": "cnode",
+  "node_id": "flex-cluster-1001-cnode-8",
+  "cluster_id": "1001"
+}
+VERBOSE: POST https://54.102.19.180/api/v1/tasks/remove_from_freepool with 96-byte payload
+VERBOSE: received 1142-byte response of content type application/json
+VERBOSE: Content encoding: utf-8
+VERBOSE: {
+  "Authorization": "Bearer  3q1tMyhtsi1jiC6sFOWSQqBKT00Rg3OD5HustDwYtL6"
+}
+VERBOSE: {
+  "node_type": "cnode",
+  "node_id": "flex-cluster-1001-cnode-9",
+  "cluster_id": "1001"
+}
+VERBOSE: POST https://54.102.19.180/api/v1/tasks/remove_from_freepool with 96-byte payload
+VERBOSE: received 1142-byte response of content type application/json
+VERBOSE: Content encoding: utf-8
+_id                    _version _obj
+---                    -------- ----
+3WWiAfNDkbqq9CmFgZIbRX        1 @{plot=; state=pending; progress_pct=0; creator_id=kaminario; update_ts_millis=1601996377310; create_ts_millis=1601996377310; steps=System.Object[]; labels=; type=remove-node-…
+2sEHYj1ooPBO9UUGk0pz0L        1 @{plot=; state=pending; progress_pct=0; creator_id=kaminario; update_ts_millis=1601996377584; create_ts_millis=1601996377584; steps=System.Object[]; labels=; type=remove-node-…
+1jxQowXYtgN30iQhc9tGEx        1 @{plot=; state=pending; progress_pct=0; creator_id=kaminario; update_ts_millis=1601996377862; create_ts_millis=1601996377862; steps=System.Object[]; labels=; type=remove-node-…
+
+```
