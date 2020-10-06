@@ -9,8 +9,8 @@ Import-Module ./path/FLEX/flex.psm1
 
 Or, run the provided InstallSDP.ps1 script. 
 ```powershell
-Unblock-File .\InstallSDP.ps1
-.\InstallSDP.ps1
+Unblock-File .\InstallFLEX.ps1
+.\InstallFLEX.ps1
 ```
 Which gives you a simple install menu. 
 ```powershell
