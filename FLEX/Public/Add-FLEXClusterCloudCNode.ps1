@@ -2,8 +2,8 @@ function Add-FLEXClusterCloudCNode {
     param(
         [parameter(Mandatory,ValueFromPipelineByPropertyName)]
         [string] $id,
-        [parameter()]
-        [int] $count = 1,
+        #[parameter()]
+        #[int] $count = 1,
         [parameter()]
         [string] $flexContext = 'FLEXConnect',
         [parameter()]
@@ -20,7 +20,7 @@ function Add-FLEXClusterCloudCNode {
         $o | Add-Member -MemberType NoteProperty -Name "cluster_id" -Value $id
         $o | Add-Member -MemberType NoteProperty -Name "cloud_node_type" -Value "Production"
         $o | Add-Member -MemberType NoteProperty -Name 'friendly_name' -Value '64 vCPU 256GB'
-
+        <#
         $totalCNodes = @()
 
         $total = 0
@@ -28,9 +28,9 @@ function Add-FLEXClusterCloudCNode {
             $totalCNodes += $o
             $total++
         }
-
+        #>
         $body = New-Object psobject 
-        $body | Add-Member -MemberType NoteProperty -Name 'cnodes' -Value @($totalCNodes)
+        $body | Add-Member -MemberType NoteProperty -Name 'cnodes' -Value @($o)
         $body | Add-Member -MemberType NoteProperty -Name 'mnodes' -Value @()
 
         $results = Invoke-FLEXRestCall -method POST -endpoint $endpoint -API $api -body $body
