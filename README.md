@@ -64,8 +64,12 @@ Invoke-FLEXRestCall -method GET -API v1 -endpoint 'pages/nodes'
 
 Specify -Verbose on any cmdlet to see the entire API process, including endoint declarations, and json statements. You can use this to help model API calls directly or troubleshoot. 
 
-```
+```powershell
 Get-FLEXClusterCNodes -showAvailable | Remove-FLEXClusterCloudCNode -Verbose
+```
+
+Will return yellow verbose messages showing the entire API call and payload:
+```
 VERBOSE: {
   "Authorization": "Bearer  3q1tMyhtsi1jiC6sFOWSQqBKT00Rg3OD5HustDwYtL6"
 }
@@ -100,10 +104,15 @@ VERBOSE: {
 VERBOSE: POST https://54.102.19.180/api/v1/tasks/remove_from_freepool with 96-byte payload
 VERBOSE: received 1142-byte response of content type application/json
 VERBOSE: Content encoding: utf-8
+```
+
+And then return the stardard response:
+```
 _id                    _version _obj
 ---                    -------- ----
 3WWiAfNDkbqq9CmFgZIbRX        1 @{plot=; state=pending; progress_pct=0; creator_id=kaminario; update_ts_millis=1601996377310; create_ts_millis=1601996377310; steps=System.Object[]; labels=; type=remove-node-…
 2sEHYj1ooPBO9UUGk0pz0L        1 @{plot=; state=pending; progress_pct=0; creator_id=kaminario; update_ts_millis=1601996377584; create_ts_millis=1601996377584; steps=System.Object[]; labels=; type=remove-node-…
 1jxQowXYtgN30iQhc9tGEx        1 @{plot=; state=pending; progress_pct=0; creator_id=kaminario; update_ts_millis=1601996377862; create_ts_millis=1601996377862; steps=System.Object[]; labels=; type=remove-node-…
+```
 
 ```
