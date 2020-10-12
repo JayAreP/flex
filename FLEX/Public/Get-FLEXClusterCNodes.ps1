@@ -7,12 +7,14 @@ function Get-FLEXClusterCNodes {
         [parameter()]
         [switch] $showAvailable
     )
+
     $results = Invoke-FLEXRestCall -method GET -API v1 -endpoint 'pages/nodes'
     if ($id) {
         $results = $results.clusters | Where-Object {$_.id -eq $id} | Select-Object cnodes
     } else {
         $results = $results.clusters | Select-Object cnodes
     }
+    
     if ($showAvailable) {
         $results = $results.cnodes | Where-Object {$_.cluster_state -eq "FREE"}
     } else {
