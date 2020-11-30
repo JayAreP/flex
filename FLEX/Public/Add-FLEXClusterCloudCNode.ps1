@@ -2,8 +2,9 @@ function Add-FLEXClusterCloudCNode {
     param(
         [parameter(Mandatory,ValueFromPipelineByPropertyName)]
         [string] $id,
-        #[parameter()]
-        #[int] $count = 1,
+        [parameter(Mandatory,ValueFromPipelineByPropertyName)]
+        [ValidateSet('GCP','AWS', IgnoreCase = $false)]
+        [string] $cluster_type,
         [parameter()]
         [string] $flexContext = 'FLEXConnect',
         [parameter()]
@@ -18,8 +19,15 @@ function Add-FLEXClusterCloudCNode {
     process {
         $o = New-Object psobject
         $o | Add-Member -MemberType NoteProperty -Name "cluster_id" -Value $id
-        $o | Add-Member -MemberType NoteProperty -Name "cloud_node_type" -Value "Production"
-        $o | Add-Member -MemberType NoteProperty -Name 'friendly_name' -Value '64 vCPU 256GB'
+        if ($cluster_type -eq "GCP") {
+            $o | Add-Member -MemberType NoteProperty -Name "cloud_node_type" -Value "ProductionV1"
+            $o | Add-Member -MemberType NoteProperty -Name 'friendly_name' -Value '60 vCPU 240GB'
+        }
+        elseif ($cluster_type -eq "AWS") {
+            $o | Add-Member -MemberType NoteProperty -Name "cloud_node_type" -Value "Production"
+            $o | Add-Member -MemberType NoteProperty -Name 'friendly_name' -Value '64 vCPU 256GB'
+        }
+        
         <#
         $totalCNodes = @()
 
