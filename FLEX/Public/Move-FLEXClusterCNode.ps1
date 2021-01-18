@@ -52,7 +52,7 @@ function Move-FLEXClusterCNode {
         $results = Invoke-FLEXRestCall -method POST -API $api -endpoint $endpoint -body $o -flexContext $flexContext
 
         if ($wait) {
-            $task = $results.items.id
+            $task = $results._id
             Write-FLEXProgress -taskID $task -message "Moving c-node"
             return $results
         } else {

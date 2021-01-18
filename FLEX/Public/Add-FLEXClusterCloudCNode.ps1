@@ -37,6 +37,7 @@ function Add-FLEXClusterCloudCNode {
             $total++
         }
         #>
+        
         $body = New-Object psobject 
         $body | Add-Member -MemberType NoteProperty -Name 'cnodes' -Value @($o)
         $body | Add-Member -MemberType NoteProperty -Name 'mnodes' -Value @()
