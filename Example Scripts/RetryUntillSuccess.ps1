@@ -21,8 +21,9 @@ Start-Sleep -Seconds 300
 
 $mnode = Get-FLEXClusterMNodes -showAvailable | Where-Object {$_.state -eq "MALFUNCTION"}
 
-if ($mnode) {
-    while ($attempt -lt $retries) {
+
+while ($attempt -lt $retries) {
+        if ($mnode.state -ne 'RUNNING') {
         # Remove the defunct mnode
         Write-Host "MNode creation failed. Removing failed MNode"
         Get-FLEXClusterMNodes -showAvailable | Where-Object {$_.state -eq "MALFUNCTION"} | Remove-FLEXClusterCloudMNode
@@ -41,5 +42,8 @@ if ($mnode) {
         Add-FLEXClusterCloudMNode -id $cluster.id -cluster_type $clusterType -size Small
         Start-Sleep -Seconds 300
         $attempt++
-    }
-}
+    } else {
+        Write-Host "---- MNode created succesfully after -" $attempt "- tries ----"
+        exit
+    }    
+} 
