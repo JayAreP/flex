@@ -24,4 +24,6 @@ function Get-FLEXClusterMNodes {
     if ($name) {
         $results = $results | Where-Object {$_.name -eq $name}
     }
+
+    return $results
 }

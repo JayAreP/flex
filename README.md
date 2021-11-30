@@ -52,6 +52,9 @@ Get-FLEXClusterNetwork
 # Create a c-node for an existing cluster:
 Get-FLEXCluster | Add-FLEXClusterCloudCNode 
 
+# Create a Small m-node for an existing cluster:
+Add-FLEXClusterCloudMNode -id 1088 -cluster_type Azure -size Small
+
 # Show all available nodes (those in the free pool)
 Get-FLEXClusterCNodes -showAvailable 
 
