@@ -40,6 +40,8 @@ function Invoke-FLEXRestCall {
 
     $token = $context.token.access_token
     $baseURI = 'https://' + $context.FLEXEndpoint + '/api/' + $API + '/' + $endpoint 
+    $verboseResponse = "Final request URI --- " + $baseURI
+    Write-Verbose $verboseResponse
 
     $header = New-FLEXAPIHeader -token $token
     $header | Convertto-json | Write-Verbose
