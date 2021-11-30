@@ -28,6 +28,8 @@ function Get-FLEXTask {
         if ($steps) {
             $results = $results.steps
         }
+
+        $results = $results | Sort-Object update_ts_millis
         
         return $results
     }
