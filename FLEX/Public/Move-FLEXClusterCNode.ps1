@@ -56,7 +56,7 @@ function Move-FLEXClusterCNode {
             Write-FLEXProgress -taskID $task -message "Moving c-node"
             return $results
         } else {
-            return $results
+            return $results._obj
         }
     }
 }

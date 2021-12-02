@@ -9,9 +9,7 @@ function Add-FLEXClusterCloudMNode {
         [ValidateSet('Large','Medium', 'Small', IgnoreCase = $false)]
         [string] $size,
         [parameter()]
-        [string] $flexContext = 'FLEXConnect',
-        [parameter()]
-        [switch] $wait
+        [string] $flexContext = 'FLEXConnect'
     )
 
     begin {
@@ -58,30 +56,19 @@ function Add-FLEXClusterCloudMNode {
                 $o | Add-Member -MemberType NoteProperty -Name 'friendly_name' -Value '102.4TiB total'
             }
         }
-        
-        <#
-        $totalCNodes = @()
-
-        $total = 0
-        while ($total -lt $count) {
-            $totalCNodes += $o
-            $total++
-        }
-        #>
-        
+                
         $body = New-Object psobject 
         $body | Add-Member -MemberType NoteProperty -Name 'cnodes' -Value @()
         $body | Add-Member -MemberType NoteProperty -Name 'mnodes' -Value @($o)
 
         $results = Invoke-FLEXRestCall -method POST -endpoint $endpoint -API $api -body $body
-        if ($wait) {
+<#      if ($wait) {
             $task = $results.items.id
             Write-FLEXProgress -taskID $task -message "Creating m-node"
-            return $results
-        } else {
-            return $results
-        }
-        
+            return $results._obj
+        } else { #>
+            return $results._obj
+        # }
     }
 }
 
