@@ -12,7 +12,7 @@
 RootModule = 'flex.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.2.21'
+ModuleVersion = '0.2.23'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()

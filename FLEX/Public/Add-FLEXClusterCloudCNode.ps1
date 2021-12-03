@@ -40,7 +40,7 @@ function Add-FLEXClusterCloudCNode {
             Write-FLEXProgress -taskID $task -message "Creating c-node"
             return $results._obj
         } else { #>
-            return $results._obj
+            return $results
         # }        
     }
 }

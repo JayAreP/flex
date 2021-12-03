@@ -5,6 +5,8 @@ function Get-FLEXTask {
         [parameter()]
         [switch] $steps,
         [parameter()]
+        [switch] $latest,
+        [parameter()]
         [string] $taskID
     )
 
@@ -30,7 +32,10 @@ function Get-FLEXTask {
         }
 
         $results = $results | Sort-Object update_ts_millis
-        
-        return $results
+        if ($latest) {
+            return $results[-1]
+        } else {
+            return $results
+        }
     }
 }
