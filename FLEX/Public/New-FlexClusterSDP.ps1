@@ -6,9 +6,7 @@ function New-FLEXClusterSDP {
         [int] $cnodes,
         [parameter(Mandatory)]
         [ValidateSet('Large','Medium', 'Small', IgnoreCase = $false)]
-        [string] $mnodeSize,
-        [parameter()]
-        [ipaddress] $systemIP
+        [string] $mnodeSize
     )
 
 
@@ -42,7 +40,7 @@ function New-FLEXClusterSDP {
     if ($freeCnodes.Count -ge $cnodes) {
         $mnodeList = @($freeMnodes[0].id)
     } else {
-        $result = "Only - " + $freeMnode.Count + " - available of the - " + $cnodes + " - requested."
+        $result = "No MNodes of the requested size are available."
         $result | Write-Error
         exit
     }
