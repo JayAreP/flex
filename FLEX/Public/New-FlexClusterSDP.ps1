@@ -1,4 +1,4 @@
-function New-FlexClusterSDP {
+function New-FLEXClusterSDP {
     param(
         [parameter(Mandatory)]
         [string] $name,
@@ -82,6 +82,6 @@ function New-FlexClusterSDP {
     $finalBody | Add-Member -MemberType NoteProperty -Name "k2_id" -Value $k2_id
 
     # Submit the call 
-    $results = Invoke-FLEXRestCall -method POST -API v1 -endpoint tasks/create-k2 -body $finalBody
+    $results = Invoke-FLEXRestCall -method POST -API v1 -endpoint 'tasks/create-k2' -body $finalBody
     return $results
 }
