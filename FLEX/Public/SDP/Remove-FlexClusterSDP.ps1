@@ -20,6 +20,9 @@ function Remove-FLEXClusterSDP {
 
     if ($o) {
         if ($confirm) {
+            $o | Out-Host
+            Write-Host "Deleting this SDP in 30 seconds..."
+            Start-Sleep -Seconds 30
             $result = Invoke-FLEXRestCall -method POST -API v1 -endpoint 'tasks/delete-k2' -body $o
         } else {
             $result = "-- Please specify -confirm."
