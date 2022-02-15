@@ -31,7 +31,7 @@ function New-FLEXClusterSDP {
     } else {
         $result = "Only - " + $freeCnode.Count + " - available of the - " + $cnodes + " - requested."
         $result | Write-Error
-        # exit
+        exit
     }
 
     # Get an appropriate mnode
