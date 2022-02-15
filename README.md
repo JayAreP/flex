@@ -68,6 +68,9 @@ Get-FLEXClusterCNodes -showAvailable | Move-FLEXClusterCNode -targetName "My SDP
 # Delete all of the nodes in the free pool
 Get-FLEXClusterCNodes -showAvailable | Remove-FLEXClusterCloudCNode
 
+# Create a new SDP using available cnodes and mnodes
+New-FLEXClusterSDP -cnodes 2 -mnodeSize Small -name "My SDP 2"
+
 # Use the bespoke REST handler for quick REST call modeling:
 Invoke-FLEXRestCall -method GET -API v1 -endpoint 'pages/nodes'
 ```
