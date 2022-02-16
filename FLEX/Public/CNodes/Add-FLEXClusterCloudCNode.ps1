@@ -42,7 +42,7 @@ function Add-FLEXClusterCloudCNode {
         $body | Add-Member -MemberType NoteProperty -Name 'cnodes' -Value @($o)
         $body | Add-Member -MemberType NoteProperty -Name 'mnodes' -Value @()
 
-        $results = Invoke-FLEXRestCall -method POST -endpoint $endpoint -API $api -body $body
+        $results = Invoke-FLEXRestCall -method POST -endpoint $endpoint -API $api -body $body -flexContext $flexContext
         if ($wait) {
             Write-FLEXProgress -message "Generating node(s) "
             $results = Convert-FLEXResults -resultsObject $results -object items

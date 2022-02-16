@@ -10,17 +10,19 @@ function New-FLEXClusterSDP {
         [parameter()]
         [switch] $generateNodes,
         [parameter()]
-        [switch] $wait
+        [switch] $wait,
+        [parameter()]
+        [string] $flexContext = 'FLEXConnect'
     )
 
 
     # body building
 
-    $flexCluster = Get-FLEXCluster
-    $flexNetwork = Get-FLEXClusterNetwork
+    $flexCluster = Get-FLEXCluster -flexContext $flexContext
+    $flexNetwork = Get-FLEXClusterNetwork -flexContext $flexContext
     [ipaddress] $mgmtNetwork = $flexNetwork.external_mgmt.Split('/')[0]
-    $flexParams = Get-FLEXClusterParameters
-    $flexSDPs = Get-FLEXClusterSDP
+    $flexParams = Get-FLEXClusterParameters -flexContext $flexContext
+    $flexSDPs = Get-FLEXClusterSDP -flexContext $flexContext
     $ipRange = $flexSDPs.count + 13
     [ipaddress] $systemIPBase = "0.0.0.$ipRange"
     [ipaddress] $systemIP = Add-IPAddress -source $mgmtNetwork -delta $systemIPBase
@@ -31,14 +33,14 @@ function New-FLEXClusterSDP {
         $cnodeCounter = 1
         while ($cnodeCounter -le $cnodes) {
             Write-Verbose "-- Creating cnode $cnodeCounter"
-            Add-FLEXClusterCloudCNode
+            Add-FLEXClusterCloudCNode -flexContext $flexContext
             $cnodeCounter++ 
         }
-        Add-FLEXClusterCloudMNode -size $mnodeSize
-        Write-FLEXProgress -message "Generating nodes"
+        Add-FLEXClusterCloudMNode -size $mnodeSize -flexContext $flexContext
+        Write-FLEXProgress -flexContext $flexContext -message "Generating nodes"
     }
 
-    $freeCnodes = Get-FLEXClusterCNodes -showAvailable | Where-Object {$_.state -eq "RUNNING"}
+    $freeCnodes = Get-FLEXClusterCNodes -flexContext $flexContext -showAvailable | Where-Object {$_.state -eq "RUNNING"}
     if ($freeCnodes.Count -ge $cnodes) {
         $cnodetop = $cnodes
         $cnodetop--
@@ -52,7 +54,7 @@ function New-FLEXClusterSDP {
 
     # Get an appropriate mnode
 
-    $freeMnodes = Get-FLEXClusterMNodes -showAvailable | Where-Object {$_.state -eq "RUNNING"} | Where-Object {$_.cloud_extra.cloud_node_type -eq $mnodeSize}
+    $freeMnodes = Get-FLEXClusterMNodes -flexContext $flexContext -showAvailable | Where-Object {$_.state -eq "RUNNING"} | Where-Object {$_.cloud_extra.cloud_node_type -eq $mnodeSize}
     if ($freeMnodes.Count -ge 1) {
         $mnodeList = @($freeMnodes[0].id)
     } else {
@@ -93,10 +95,10 @@ function New-FLEXClusterSDP {
     $finalBody | Add-Member -MemberType NoteProperty -Name "timezone" -Value $flexCluster.timezone
     $finalBody | Add-Member -MemberType NoteProperty -Name "company_name" -Value $flexParams.company_name
     $finalBody | Add-Member -MemberType NoteProperty -Name "admin_password_confirm" -Value $flexParams.admin_password
-    $finalBody | Add-Member -MemberType NoteProperty -Name "k2_id" -Value $k2_id
+    $finalBody | Add-Member -MemberType NoteProperty -Name "k2_id" -Value $null
 
     # Submit the call 
-    $results = Invoke-FLEXRestCall -method POST -API v1 -endpoint 'tasks/create-k2' -body $finalBody
+    $results = Invoke-FLEXRestCall -method POST -API v1 -endpoint 'tasks/create-k2' -body $finalBody -flexContext $flexContext
     if ($wait) {
         Write-FLEXProgress -message "Creating SDP - $name"
     }

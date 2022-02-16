@@ -19,9 +19,9 @@ function Remove-FLEXClusterCloudMNode {
         $body | Add-Member -MemberType NoteProperty -Name "node_id" -Value $id
         $body | Add-Member -MemberType NoteProperty -Name 'cluster_id' -Value $cluster_id
 
-        $results = Invoke-FLEXRestCall -method POST -endpoint $endpoint -API $api -body $body
-        
-        $results = Convert-FLEXResults -resultsObject $results -includeID
+        $results = Invoke-FLEXRestCall -method POST -endpoint $endpoint -API $api -body $body -flexContext $flexContext
+
+        $results = Convert-FLEXResults -resultsObject $results -includeID 
         return $results
     }
 }

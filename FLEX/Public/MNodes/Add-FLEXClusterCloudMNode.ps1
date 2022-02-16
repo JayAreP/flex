@@ -12,7 +12,7 @@ function Add-FLEXClusterCloudMNode {
     begin {
         $endpoint = 'add_and_install_cloud_nodes' 
         $api = 'v1'
-        $cluster = Get-FLEXCluster
+        $cluster = Get-FLEXCluster -flexContext $flexContext
         if (!$cluster.id) {
             $err = "No cluster discovered, please first connect to FLEX using Connect-FLEX"
             $err | Write-Error
@@ -68,7 +68,7 @@ function Add-FLEXClusterCloudMNode {
         $body | Add-Member -MemberType NoteProperty -Name 'cnodes' -Value @()
         $body | Add-Member -MemberType NoteProperty -Name 'mnodes' -Value @($o)
 
-        $results = Invoke-FLEXRestCall -method POST -endpoint $endpoint -API $api -body $body
+        $results = Invoke-FLEXRestCall -method POST -endpoint $endpoint -API $api -body $body -flexContext $flexContext
         if ($wait) {
             Write-FLEXProgress -message "Generating node(s) "
             $results = Convert-FLEXResults -resultsObject $results -object items

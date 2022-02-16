@@ -19,7 +19,7 @@ function Move-FLEXClusterCNode {
 
     process {
 
-        $cnodeSrc = Get-FLEXClusterCNodes | Where-Object {$_.id -eq $id}
+        $cnodeSrc = Get-FLEXClusterCNodes -flexContext $flexContext | Where-Object {$_.id -eq $id}
 
         $cnode = New-Object psobject
 
@@ -33,7 +33,7 @@ function Move-FLEXClusterCNode {
         $cnode | Add-Member -MemberType NoteProperty -Name "src_k2_name" -Value $sourceName
 
         if ($targetName -ne "Free Pool") {
-            $targetSDP = Get-FLEXClusterSDP -name $targetName
+            $targetSDP = Get-FLEXClusterSDP -name $targetName -flexContext $flexContext
             $cnode | Add-Member -MemberType NoteProperty -Name "tgt_k2_id" -Value $targetSDP.k2_id
         } else {
             $cnode | Add-Member -MemberType NoteProperty -Name "tgt_k2_id" -Value $null
@@ -53,7 +53,7 @@ function Move-FLEXClusterCNode {
 
         if ($wait) {
             $task = $results._id
-            Write-FLEXProgress -taskID $task -message "Moving c-node"
+            Write-FLEXProgress -taskID $task -message "Moving c-node" -flexContext $flexContext
             return $results
         } else {
             return $results._obj

@@ -5,10 +5,12 @@ function Get-FLEXClusterCNodes {
         [parameter()]
         [string] $name,
         [parameter()]
-        [switch] $showAvailable
+        [switch] $showAvailable,
+        [parameter()]
+        [string] $flexContext = 'FLEXConnect'
     )
 
-    $results = Invoke-FLEXRestCall -method GET -API v1 -endpoint 'pages/nodes'
+    $results = Invoke-FLEXRestCall -method GET -API v1 -endpoint 'pages/nodes' -flexContext $flexContext
     if ($id) {
         $results = $results.clusters | Where-Object {$_.id -eq $id} | Select-Object cnodes
     } else {

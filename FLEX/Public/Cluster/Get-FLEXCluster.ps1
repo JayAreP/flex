@@ -1,9 +1,11 @@
 function Get-FLEXCluster {
     param(
         [parameter()]
-        [string] $id
+        [string] $id,
+        [parameter()]
+        [string] $flexContext = 'FLEXConnect'
     )
-    $results = Invoke-FLEXRestCall -method GET -API v1 -endpoint 'pages/dashboard'
+    $results = Invoke-FLEXRestCall -method GET -API v1 -endpoint 'pages/dashboard' -flexContext $flexContext
     if ($id) {
         $results = $results.clusters | Where-Object {$_.id -eq $id} | Select-Object id,name,site_id,cluster_type,status,enabled_checkpointing,timezone
     } else {

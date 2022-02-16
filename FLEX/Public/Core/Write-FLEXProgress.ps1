@@ -3,14 +3,16 @@ function Write-FLEXProgress {
         [parameter()]
         [string] $taskId,
         [parameter()]
-        [string] $message = "Please wait..."
+        [string] $message = "Please wait...",
+        [parameter()]
+        [string] $flexContext = 'FLEXConnect'
     )
 
     
     if ($taskId) {
-        $progress = (Get-FLEXTask | Where-Object {$_.ref_id -eq $taskId})._obj.progress_pct
+        $progress = (Get-FLEXTask -taskID $taskId).progress_pct
     } else {
-        $tasks = (Get-FLEXTask | Where-Object {$_.state -eq "running"} | Sort-Object progress_pct)
+        $tasks = (Get-FLEXTask -flexContext $flexContext | Where-Object {$_.state -eq "running"} | Sort-Object progress_pct)
         if ($tasks) {
             $progress = $tasks[0].progress_pct
         } else {
@@ -23,9 +25,9 @@ function Write-FLEXProgress {
         $activity = $message
         Write-Progress -Activity $activity -PercentComplete $progress
         if ($taskId) {
-            $progress = (Get-FLEXTask | Where-Object {$_.ref_id -eq $taskId})._obj.progress_pct
+            $progress = (Get-FLEXTask -flexContext $flexContext -taskID $taskId).progress_pct
         } else {
-            $tasks = (Get-FLEXTask | Where-Object {$_.state -eq "running"} | Sort-Object progress_pct)
+            $tasks = (Get-FLEXTask -flexContext $flexContext | Where-Object {$_.state -eq "running"} | Sort-Object progress_pct)
             if ($tasks) {
                 $progress = $tasks[0].progress_pct
             } else {

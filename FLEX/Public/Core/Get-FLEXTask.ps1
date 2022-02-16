@@ -7,7 +7,11 @@ function Get-FLEXTask {
         [parameter()]
         [switch] $latest,
         [parameter()]
-        [string] $taskID
+        [switch] $inProgress,
+        [parameter()]
+        [string] $taskID,
+        [parameter()]
+        [string] $flexContext = 'FLEXConnect'
     )
 
     begin {
@@ -20,7 +24,7 @@ function Get-FLEXTask {
             $endpoint = $endpoint + '/' + $taskID
         }
     
-        $results = Invoke-FLEXRestCall -method GET -API $api -endpoint $endpoint
+        $results = Invoke-FLEXRestCall -method GET -API $api -endpoint $endpoint -flexContext $flexContext
 
         # Parsing this kinda stupid considering I could have written a class for this much more easily. Will do just that later. 
 
@@ -46,7 +50,11 @@ function Get-FLEXTask {
             $resultArray += $o
         }
 
-        $results = $resultArray
+        $results = $resultArray | Sort-Object update_ts_millis
+
+        if ($inProgress) {
+            $results = $results | Where-Object {$_.state -eq 'running'}
+        }
     
         if ($id) {
             $results = $results | Where-Object {$_.plot.node_id -eq $id}
