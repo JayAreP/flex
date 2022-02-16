@@ -73,7 +73,7 @@ function Add-FLEXClusterCloudMNode {
             Write-FLEXProgress -message "Generating node(s) "
             return $results
         } else { 
-            return $results
+            return $results.items
         }   
     }
 }
