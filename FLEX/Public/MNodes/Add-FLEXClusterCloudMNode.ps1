@@ -1,10 +1,7 @@
 function Add-FLEXClusterCloudMNode {
     param(
-        [parameter(Mandatory,ValueFromPipelineByPropertyName)]
-        [string] $id,
-        [parameter(Mandatory,ValueFromPipelineByPropertyName)]
-        [ValidateSet('GCP','AWS', 'Azure', IgnoreCase = $false)]
-        [string] $cluster_type,
+        [parameter()]
+        [switch] $wait,
         [parameter(Mandatory,ValueFromPipelineByPropertyName)]
         [ValidateSet('Large','Medium', 'Small', IgnoreCase = $false)]
         [string] $size,
@@ -15,12 +12,22 @@ function Add-FLEXClusterCloudMNode {
     begin {
         $endpoint = 'add_and_install_cloud_nodes' 
         $api = 'v1'
+        $cluster = Get-FLEXCluster
+        if (!$cluster.id) {
+            $err = "No cluster discovered, please first connect to FLEX using Connect-FLEX"
+            $err | Write-Error
+            exit
+        }
     }
 
     process {
         $o = New-Object psobject
-        $o | Add-Member -MemberType NoteProperty -Name "cluster_id" -Value $id
-        if ($cluster_type -eq "GCP") {
+        if ($id) {
+            $o | Add-Member -MemberType NoteProperty -Name "cluster_id" -Value $id
+        } else {
+            $o | Add-Member -MemberType NoteProperty -Name "cluster_id" -Value $cluster.id
+        }
+        if ($cluster.cluster_type -eq "GCP") {
             if ($size = 'Small') {
                 $o | Add-Member -MemberType NoteProperty -Name "cloud_node_type" -Value $size
                 $o | Add-Member -MemberType NoteProperty -Name 'friendly_name' -Value '11.29TiB total'
@@ -32,7 +39,7 @@ function Add-FLEXClusterCloudMNode {
                 $o | Add-Member -MemberType NoteProperty -Name 'friendly_name' -Value '45.97TiB total'
             }
         }
-        elseif ($cluster_type -eq "AWS") {
+        elseif ($cluster.cluster_type -eq "AWS") {
             if ($size = 'Small') {
                 $o | Add-Member -MemberType NoteProperty -Name "cloud_node_type" -Value $size
                 $o | Add-Member -MemberType NoteProperty -Name 'friendly_name' -Value 'Prd19TiB'
@@ -44,7 +51,7 @@ function Add-FLEXClusterCloudMNode {
                 $o | Add-Member -MemberType NoteProperty -Name 'friendly_name' -Value 'Prd76TiB'
             }
         }
-        elseif ($cluster_type -eq "Azure") {
+        elseif ($cluster.cluster_type -eq "AZURE") {
             if ($size = 'Small') {
                 $o | Add-Member -MemberType NoteProperty -Name "cloud_node_type" -Value $size
                 $o | Add-Member -MemberType NoteProperty -Name 'friendly_name' -Value '27.32TiB total'
@@ -62,13 +69,12 @@ function Add-FLEXClusterCloudMNode {
         $body | Add-Member -MemberType NoteProperty -Name 'mnodes' -Value @($o)
 
         $results = Invoke-FLEXRestCall -method POST -endpoint $endpoint -API $api -body $body
-<#      if ($wait) {
-            $task = $results.items.id
-            Write-FLEXProgress -taskID $task -message "Creating m-node"
-            return $results._obj
-        } else { #>
-            return $results._obj
-        # }
+        if ($wait) {
+            Write-FLEXProgress -message "Generating node(s) "
+            return $results
+        } else { 
+            return $results
+        }   
     }
 }
 
