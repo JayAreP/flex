@@ -29,7 +29,7 @@ function New-FLEXClusterSDP {
 
     if ($generateNodes) {
         $cnodeCounter = 1
-        while ($cnodeCounter -lt $cnodes) {
+        while ($cnodeCounter -le $cnodes) {
             Write-Verbose "-- Creating cnode $cnodeCounter"
             Add-FLEXClusterCloudCNode
             $cnodeCounter++ 
