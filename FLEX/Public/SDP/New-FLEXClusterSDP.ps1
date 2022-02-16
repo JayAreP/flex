@@ -32,7 +32,7 @@ function New-FLEXClusterSDP {
         while ($cnodeCounter -lt $cnodes) {
             Write-Verbose "-- Creating cnode $cnodeCounter"
             Add-FLEXClusterCloudCNode
-            $nodeCounter++ 
+            $cnodeCounter++ 
         }
         Add-FLEXClusterCloudMNode -size $mnodeSize
         Write-FLEXProgress -message "Generating nodes"
