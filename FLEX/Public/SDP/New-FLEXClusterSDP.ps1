@@ -6,7 +6,11 @@ function New-FLEXClusterSDP {
         [int] $cnodes,
         [parameter(Mandatory)]
         [ValidateSet('Large','Medium', 'Small', IgnoreCase = $false)]
-        [string] $mnodeSize
+        [string] $mnodeSize,
+        [parameter()]
+        [switch] $generateNodes,
+        [parameter()]
+        [switch] $wait
     )
 
 
@@ -23,26 +27,38 @@ function New-FLEXClusterSDP {
 
     # Get list of cnodes
 
+    if ($generateNodes) {
+        $cnodeCounter = 1
+        while ($cnodeCounter -lt $cnodes) {
+            Write-Verbose "-- Creating cnode $cnodeCounter"
+            Add-FLEXClusterCloudCNode
+            $nodeCounter++ 
+        }
+        Add-FLEXClusterCloudMNode -size $mnodeSize
+        Write-FLEXProgress -message "Generating nodes"
+    }
+
     $freeCnodes = Get-FLEXClusterCNodes -showAvailable | Where-Object {$_.state -eq "RUNNING"}
-    if ($freeMnodes.Count -ge 1) {
-        $cnodetop = $cnodes--
+    if ($freeCnodes.Count -ge $cnodes) {
+        $cnodetop = $cnodes
+        $cnodetop--
         $useCnodes = $freeCnodes[0 .. $cnodetop]
         $cnodeList = @($useCnodes.id)
     } else {
         $result = "Only - " + $freeCnode.Count + " - available of the - " + $cnodes + " - requested."
         $result | Write-Error
-        exit
+        return $result
     }
 
     # Get an appropriate mnode
 
     $freeMnodes = Get-FLEXClusterMNodes -showAvailable | Where-Object {$_.state -eq "RUNNING"} | Where-Object {$_.cloud_extra.cloud_node_type -eq $mnodeSize}
-    if ($freeCnodes.Count -ge $cnodes) {
+    if ($freeMnodes.Count -ge 1) {
         $mnodeList = @($freeMnodes[0].id)
     } else {
         $result = "No MNodes of the requested size are available."
         $result | Write-Error
-        exit
+        return $result
     }
 
     # carve out a k2_id for the new SDP
@@ -81,5 +97,8 @@ function New-FLEXClusterSDP {
 
     # Submit the call 
     $results = Invoke-FLEXRestCall -method POST -API v1 -endpoint 'tasks/create-k2' -body $finalBody
-    return $results
+    if ($wait) {
+        Write-FLEXProgress -message "Creating SDP - $name"
+    }
+    return $results._obj
 }
