@@ -64,7 +64,7 @@ function New-FLEXClusterSDP {
     }
 
     # carve out a k2_id for the new SDP
-
+    <#
     if ($flexSDPs) {
         [int] $lastId = $flexSDPs[-1].k2_id 
         $lastId++
@@ -72,7 +72,7 @@ function New-FLEXClusterSDP {
     } else {
         $k2_id = $flexCluster.id + "01"
     }
-
+    #>
     # create the network settings
 
     $netArray = New-Object psobject
