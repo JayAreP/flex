@@ -71,9 +71,11 @@ function Add-FLEXClusterCloudMNode {
         $results = Invoke-FLEXRestCall -method POST -endpoint $endpoint -API $api -body $body
         if ($wait) {
             Write-FLEXProgress -message "Generating node(s) "
+            $results = Convert-FLEXResults -resultsObject $results -object items
             return $results
         } else { 
-            return $results.items
+            $results = Convert-FLEXResults -resultsObject $results -object items
+            return $results
         }   
     }
 }
