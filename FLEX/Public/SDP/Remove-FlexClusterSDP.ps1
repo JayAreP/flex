@@ -5,7 +5,9 @@ function Remove-FLEXClusterSDP {
         [parameter()]
         [switch] $confirm,
         [parameter()]
-        [switch] $force
+        [switch] $force,
+        [parameter()]
+        [switch] $wait
     )
 
     # grab the SDP info
@@ -32,8 +34,10 @@ function Remove-FLEXClusterSDP {
             $result = "-- Please specify -confirm."
         }
     }
-
-    return $result
+    if ($wait) {
+        Write-FLEXProgress -message "Removing SDP - $name"
+    }
+    return $result._obj
 }
 
 

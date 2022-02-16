@@ -50,10 +50,10 @@ Get-FLEXTask
 Get-FLEXClusterNetwork
 
 # Create a c-node for an existing cluster:
-Get-FLEXCluster | Add-FLEXClusterCloudCNode 
+Add-FLEXClusterCloudCNode 
 
 # Create a Small m-node for an existing cluster:
-Add-FLEXClusterCloudMNode -id 1088 -cluster_type Azure -size Small
+Add-FLEXClusterCloudMNode -size Small
 
 # Show all available nodes (those in the free pool)
 Get-FLEXClusterCNodes -showAvailable 
@@ -62,7 +62,7 @@ Get-FLEXClusterCNodes -showAvailable
 Get-FLEXClusterCNodes -showAvailable | Move-FLEXClusterCNode -targetName "My SDP"
 
 # Invoke a wait on some operations (for better inherit sequencing). For example, this sequence will wait on the c-node to be created prior to the move operation:
-Get-FLEXCluster | Add-FLEXClusterCloudCNode -wait
+Add-FLEXClusterCloudCNode -wait
 Get-FLEXClusterCNodes -showAvailable | Move-FLEXClusterCNode -targetName "My SDP"
 
 # Delete all of the nodes in the free pool
@@ -70,6 +70,9 @@ Get-FLEXClusterCNodes -showAvailable | Remove-FLEXClusterCloudCNode
 
 # Create a new SDP using available cnodes and mnodes
 New-FLEXClusterSDP -cnodes 2 -mnodeSize Small -name "My SDP 2"
+
+# Create a new SDP using available cnodes and mnodes, this instructs flex to first create the required nodes. This is a one-line SDP creation from nothing. 
+New-FLEXClusterSDP -cnodes 2 -mnodeSize Small -name "My SDP 3" -generateNodes
 
 # Use the bespoke REST handler for quick REST call modeling:
 Invoke-FLEXRestCall -method GET -API v1 -endpoint 'pages/nodes'
