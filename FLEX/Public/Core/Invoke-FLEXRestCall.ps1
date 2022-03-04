@@ -10,6 +10,8 @@ function Invoke-FLEXRestCall {
         [string] $endpoint,
         [parameter()] 
         [PSCustomObject] $body,
+        [parameter()] 
+        [string] $outfile,
         [parameter()]
         [string] $flexContext = 'FLEXConnect',
         [parameter()]
@@ -52,6 +54,9 @@ function Invoke-FLEXRestCall {
             $bodyjson = $body | ConvertTo-Json -Depth 10
             $bodyjson | Write-Verbose
             $result = Invoke-RestMethod -header $header -Method $method -Uri $baseURI -TimeoutSec $timeout -SkipCertificateCheck -Body $bodyjson
+        } elseif ($outfile) {
+            Invoke-RestMethod -header $header -Method $method -Uri $baseURI -TimeoutSec $timeout -SkipCertificateCheck -OutFile $outfile
+            $result = $outfile
         } else {
             $result = Invoke-RestMethod -header $header -Method $method -Uri $baseURI -TimeoutSec $timeout -SkipCertificateCheck
         }
@@ -67,6 +72,9 @@ function Invoke-FLEXRestCall {
             $bodyjson = $body | ConvertTo-Json -Depth 10
             $bodyjson | Write-Verbose
             $result = Invoke-RestMethod -header $header -Method $method -Uri $baseURI -Body $bodyjson
+        } elseif ($outfile) {
+            Invoke-RestMethod -header $header -Method $method -Uri $baseURI -TimeoutSec $timeout -OutFile $outfile
+            $result = $outfile
         } else {
             $result = Invoke-RestMethod -header $header -Method $method -Uri $baseURI 
         }
