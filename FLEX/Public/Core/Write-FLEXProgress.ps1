@@ -10,7 +10,13 @@ function Write-FLEXProgress {
 
     
     if ($taskId) {
-        $progress = (Get-FLEXTask -taskID $taskId).progress_pct
+        $flexTask = Get-FLEXTask -taskID $taskId
+        if ($flexTask.state -eq "running") {
+            $progress = $flexTask.progress_pct
+        } else {
+            $progress = 100
+        }
+        
     } else {
         $tasks = (Get-FLEXTask -flexContext $flexContext | Where-Object {$_.state -eq "running"} | Sort-Object progress_pct)
         if ($tasks) {
@@ -25,7 +31,12 @@ function Write-FLEXProgress {
         $activity = $message
         Write-Progress -Activity $activity -PercentComplete $progress
         if ($taskId) {
-            $progress = (Get-FLEXTask -flexContext $flexContext -taskID $taskId).progress_pct
+            $flexTask = Get-FLEXTask -taskID $taskId
+            if ($flexTask.state -eq "running") {
+                $progress = $flexTask.progress_pct
+            } else {
+                $progress = 100
+            }
         } else {
             $tasks = (Get-FLEXTask -flexContext $flexContext | Where-Object {$_.state -eq "running"} | Sort-Object progress_pct)
             if ($tasks) {
