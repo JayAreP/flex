@@ -78,6 +78,7 @@ function Invoke-FLEXRestCall {
         } else {
             $result = Invoke-RestMethod -header $header -Method $method -Uri $baseURI 
         }
+        $result = @($result)
     }
     return $result
 }
