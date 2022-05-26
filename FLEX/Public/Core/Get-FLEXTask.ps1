@@ -15,8 +15,8 @@ function Get-FLEXTask {
     )
 
     begin {
-        $endpoint = 'tasks'
-        $API = 'v1'
+        $endpoint = 'task4d'
+        $API = 'v2'
     }
 
     process {
@@ -32,20 +32,20 @@ function Get-FLEXTask {
         if ($results.hits) {
             foreach ($r in $results.hits) {
                 $o = New-Object psobject
-                $o | Add-Member -MemberType NoteProperty -Name "taskid" -Value $r._id
-                $propArray = ($r._obj | Get-Member -MemberType NoteProperty).name
+                $o | Add-Member -MemberType NoteProperty -Name "taskid" -Value $r.id
+                $propArray = ($r.obj | Get-Member -MemberType NoteProperty).name
                 foreach ($n in $propArray) {
-                    $o | Add-Member -MemberType NoteProperty -Name $n -Value $r._obj.$n
+                    $o | Add-Member -MemberType NoteProperty -Name $n -Value $r.obj.$n
                 }
                 $resultArray += $o
             }
         } else {
             $r = $results
             $o = New-Object psobject
-            $o | Add-Member -MemberType NoteProperty -Name "taskid" -Value $r._id
-            $propArray = ($r._obj | Get-Member -MemberType NoteProperty).name
+            $o | Add-Member -MemberType NoteProperty -Name "taskid" -Value $r.id
+            $propArray = ($r.obj | Get-Member -MemberType NoteProperty).name
             foreach ($n in $propArray) {
-                $o | Add-Member -MemberType NoteProperty -Name $n -Value $r._obj.$n
+                $o | Add-Member -MemberType NoteProperty -Name $n -Value $r.obj.$n
             }
             $resultArray += $o
         }
