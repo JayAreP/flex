@@ -78,7 +78,12 @@ function Invoke-FLEXRestCall {
         } else {
             $result = Invoke-RestMethod -header $header -Method $method -Uri $baseURI 
         }
+
         $result = @($result)
     }
+
+    Write-Verbose "-- API Response --`n"
+    $result | ConvertTo-Json -Depth 10 | Write-Verbose
+
     return $result
 }
