@@ -98,7 +98,6 @@ function New-FLEXClusterSDP {
 
     $finalBody = New-Object psobject
 
-    
     if ($versionStepping -lt 4) {
         $finalBody | Add-Member -MemberType NoteProperty -Name "timezone" -Value $flexCluster.timezone
         $finalBody | Add-Member -MemberType NoteProperty -Name "k2_id" -Value $null
@@ -124,7 +123,6 @@ function New-FLEXClusterSDP {
     if ($versionStepping -ge 4) {
         $finalBody | Add-Member -MemberType NoteProperty -Name "dns_srvs" -Value @{}
         $finalBody | Add-Member -MemberType NoteProperty -Name "ntp_srvs" -Value @{}
-        $finalBody | Add-Member -MemberType NoteProperty -Name "iscsi_over_mgmt" -Value $flexParams.iscsi_over_mgmt
         $finalBody | Add-Member -MemberType NoteProperty -Name "iscsi_over_mgmt" -Value $flexParams.iscsi_over_mgmt
     }
 
