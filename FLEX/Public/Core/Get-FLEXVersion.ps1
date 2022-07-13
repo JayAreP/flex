@@ -1,6 +1,8 @@
 function Get-FLEXVersion {
     param(
         [parameter()]
+        [switch] $majorOnly,
+        [parameter()]
         [string] $flexContext = 'FLEXConnect'
     )
 
@@ -10,6 +12,12 @@ function Get-FLEXVersion {
 
     process {
         $results = Invoke-FLEXRestCall -method GET -API v1 -endpoint $endpoint -flexContext 'flexconnect'
-        return $results.version
+        if ($majorOnly) {
+            $version = $results.version
+            [int]$majorVersion = $version.Split('.')[1]
+            return $majorVersion
+        } else {
+            return $results.version
+        }
     }
 }

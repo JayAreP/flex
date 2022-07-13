@@ -7,11 +7,22 @@ function Get-FLEXTaskLog {
     )
 
     begin {
-        $api = 'v1'
+        $versionStepping = Get-FLEXVersion -majorOnly
+        if ($versionStepping -ge 4) {
+            $api = 'v2'
+        } else {
+            $api = 'v1'
+        }
     }
 
     Process {
-        $endpoint = 'tasks/' + $taskID + '/logs'
+        $versionStepping = Get-FLEXVersion -majorOnly
+        if ($versionStepping -ge 4) {
+            $endpoint = 'task4d/' + $taskID + '/logs'
+        } else {
+            $endpoint = 'tasks/' + $taskID + '/logs'
+        }
+
         $results = Invoke-FLEXRestCall -method GET -API $api -endpoint $endpoint 
         return $results
     }

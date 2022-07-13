@@ -50,6 +50,10 @@ function Connect-FLEX {
 
     Set-Variable -Name $flexContext -Value $o -Scope Global
 
-    return $response
+    $version = Get-FLEXVersion
+    $o | Add-Member -MemberType NoteProperty -Name 'version' -Value $version
+    Set-Variable -Name $flexContext -Value $o -Scope Global
+
+    return $o
 }
 
