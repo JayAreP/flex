@@ -8,7 +8,7 @@ function Get-FLEXTaskLog {
 
     begin {
         $versionStepping = Get-FLEXVersion -majorOnly
-        if ($versionStepping -ge 4) {
+        if ($versionStepping -ge 3) {
             $api = 'v2'
         } else {
             $api = 'v1'
@@ -17,7 +17,7 @@ function Get-FLEXTaskLog {
 
     Process {
         $versionStepping = Get-FLEXVersion -majorOnly
-        if ($versionStepping -ge 4) {
+        if ($versionStepping -ge 3) {
             $endpoint = 'task4d/' + $taskID + '/logs'
         } else {
             $endpoint = 'tasks/' + $taskID + '/logs'
