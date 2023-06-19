@@ -1,56 +1,55 @@
 function Add-FLEXClusterCloudCNode {
     param(
+        [parameter(Mandatory)]
+        [string] $sdpName,
         [parameter()]
         [switch] $wait,
+        [parameter()]
+        [switch] $whatif,
         [parameter()]
         [string] $flexContext = 'FLEXConnect'
     )
 
     begin {
-        $endpoint = 'add_and_install_cloud_nodes' 
-        $api = 'v1'
-        $cluster = Get-FLEXCluster -flexContext $flexContext
-        if (!$cluster.id) {
+
+        $flexCluster = Get-FLEXCluster -flexContext $flexContext
+        
+        if (!$flexCluster.id) {
             $err = "No cluster discovered, please first connect to FLEX using Connect-FLEX"
             $err | Write-Error
             exit
         }
+        
+        $flexSDP = Get-FLEXClusterSDP -name $sdpName -flexContext $flexContext
+        if (!$flexSDP.id) {
+            $err = "No SDP discovered, pleae check the value for sdpName"
+            $err | Write-Error
+            exit
+        }
+        $endpoint = 'clusters/' + $flexCluster.id + '/sdps/' + $flexSDP.id + '/add_nodes'
+        $api = 'v2'
+
+
     }
 
     process {
-        $o = New-Object psobject
-        if ($id) {
-            $o | Add-Member -MemberType NoteProperty -Name "cluster_id" -Value $id
-        } else {
-            $o | Add-Member -MemberType NoteProperty -Name "cluster_id" -Value $cluster.id
-        }
-        
-        if ($cluster.cluster_type -eq "GCP") {
-            $o | Add-Member -MemberType NoteProperty -Name "cloud_node_type" -Value "Production"
-            $o | Add-Member -MemberType NoteProperty -Name 'friendly_name' -Value '60 vCPU 240GB'
-        }
-        elseif ($cluster.cluster_type -eq "AWS") {
-            $o | Add-Member -MemberType NoteProperty -Name "cloud_node_type" -Value "Production"
-            $o | Add-Member -MemberType NoteProperty -Name 'friendly_name' -Value '64 vCPU 256GB'
-        }
-        elseif ($cluster.cluster_type -eq "AZURE") {            
-            $o | Add-Member -MemberType NoteProperty -Name "cloud_node_type" -Value "Production"
-            $o | Add-Member -MemberType NoteProperty -Name 'friendly_name' -Value '64 vCPU 256GB'
-        }
-                
-        $body = New-Object psobject 
-        $body | Add-Member -MemberType NoteProperty -Name 'cnodes' -Value @($o)
-        $body | Add-Member -MemberType NoteProperty -Name 'mnodes' -Value @()
 
-        $results = Invoke-FLEXRestCall -method POST -endpoint $endpoint -API $api -body $body -flexContext $flexContext
-        if ($wait) {
-            Write-FLEXProgress -message "Generating node(s) "
-            $results = Convert-FLEXResults -resultsObject $results -object items
-            return $results
-        } else { 
-            $results = Convert-FLEXResults -resultsObject $results -object items
-            return $results
-        }        
+        # Body building 
+        $finalBody = New-Object psobject
+        $finalBody | Add-Member -MemberType NoteProperty -Name 'mnodes' -Value @()
+        $finalBody | Add-Member -MemberType NoteProperty -Name 'cnodes_quantity' -Value 1
+
+        # Submit the call 
+        if ($whatif) {
+            $endpoint | Write-Host -ForegroundColor yellow
+            $finalBody | ConvertTo-Json -Depth 10 | Write-Host -ForegroundColor yellow
+        } else {
+            $results = Invoke-FLEXRestCall -method POST -API $api -endpoint $endpoint -body $finalBody -flexContext $flexContext
+            if ($wait) {
+                Write-FLEXProgress -message "Adding CNode"
+            }
+            return $results._obj
+        }
     }
 }
 
