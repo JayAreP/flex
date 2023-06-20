@@ -3,13 +3,14 @@ function New-FLEXClusterSDP {
         [parameter(Mandatory)]
         [string] $name,
         [parameter()]
-        [switch] $Pv2,
-        [parameter()]
-        [ValidateSet(40000,80000)]
-        [int] $Pv2SingleNodeIOPS = 40000,
+        [ValidateSet('40k','80k')]
+        [string] $Pv2,
         [parameter(Mandatory)]
         [ValidateSet(2,3,4,5,6,7,8)]
         [int] $cnodes,
+        [parameter()]
+        [ValidateSet(2,3,4,5,6,7,8)]
+        [int] $minCnodes = $cnodes,
         [parameter(Mandatory)]
         [ValidateSet('Large','Medium', 'Small', IgnoreCase = $false)]
         [string] $mnodeSize,
@@ -77,7 +78,7 @@ function New-FLEXClusterSDP {
 
     $finalBody | Add-Member -MemberType NoteProperty -Name "cnodes" -Value @($cnodeBody)
     $finalBody | Add-Member -MemberType NoteProperty -Name "mnodes" -Value @($mnodeBody)
-    $finalBody | Add-Member -MemberType NoteProperty -Name "min_cnodes" -Value $cnodes
+    $finalBody | Add-Member -MemberType NoteProperty -Name "min_cnodes" -Value $minCnodes
 
     if ($Pv2) {
         $finalBody | Add-Member -MemberType NoteProperty -Name "single_cnode_iops" -Value $Pv2SingleNodeIOPS

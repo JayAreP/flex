@@ -1,7 +1,10 @@
-function Add-FLEXClusterCloudCNode {
+function Add-FLEXClusterSDPCNode {
     param(
         [parameter(Mandatory)]
         [string] $sdpName,
+        [parameter()]
+        [ValidateSet(1,2,3,4,5,6)]
+        [int] $count = 1,
         [parameter()]
         [switch] $wait,
         [parameter()]
@@ -29,7 +32,6 @@ function Add-FLEXClusterCloudCNode {
         $endpoint = 'clusters/' + $flexCluster.id + '/sdps/' + $flexSDP.id + '/add_nodes'
         $api = 'v2'
 
-
     }
 
     process {
@@ -37,7 +39,7 @@ function Add-FLEXClusterCloudCNode {
         # Body building 
         $finalBody = New-Object psobject
         $finalBody | Add-Member -MemberType NoteProperty -Name 'mnodes' -Value @()
-        $finalBody | Add-Member -MemberType NoteProperty -Name 'cnodes_quantity' -Value 1
+        $finalBody | Add-Member -MemberType NoteProperty -Name 'cnodes_quantity' -Value $count
 
         # Submit the call 
         if ($whatif) {

@@ -40,22 +40,13 @@ function Invoke-FLEXRestCall {
         return $err | Write-Error
     }
 
-    <#
-    # check for version
-    $requiredVersion = 6
-    $runningVersion = Get-FLEXVersion -majorOnly 
-    if ($requiredVersion -ne $runningVersion) {
-        $err = "This version of the Flex SDK is not compatable with the connected version of Flex." 
-        return $err | Write-Error
-    }
-    #>
     $token = $context.token.access_token
     $baseURI = 'https://' + $context.FLEXEndpoint + '/api/' + $API + '/' + $endpoint 
     $verboseResponse = "Final request URI --- " + $baseURI
     Write-Verbose $verboseResponse
 
-    $header = New-FLEXAPIHeader -token $token
-    $postheader = $header = New-FLEXAPIHeader -token $token -post
+    $header = New-FLEXAPIHeader -token $token -post
+    # $postheader = New-FLEXAPIHeader -token $token -post
     $header | Convertto-json | Write-Verbose
 
     # $securetoken = $token | ConvertTo-SecureString -Force -AsPlainText
@@ -63,7 +54,7 @@ function Invoke-FLEXRestCall {
         if ($body) {
             $bodyjson = $body | ConvertTo-Json -Depth 10
             $bodyjson | Write-Verbose
-            $result = Invoke-RestMethod -header $postheader -Method $method -Uri $baseURI -TimeoutSec $timeout -SkipCertificateCheck -Body $bodyjson
+            $result = Invoke-RestMethod -header $header -Method $method -Uri $baseURI -TimeoutSec $timeout -SkipCertificateCheck -Body $bodyjson
         } elseif ($outfile) {
             Invoke-RestMethod -header $header -Method $method -Uri $baseURI -TimeoutSec $timeout -SkipCertificateCheck -OutFile $outfile
             $result = $outfile
@@ -81,7 +72,7 @@ function Invoke-FLEXRestCall {
         if ($body) {
             $bodyjson = $body | ConvertTo-Json -Depth 10
             $bodyjson | Write-Verbose
-            $result = Invoke-RestMethod -header $postheader -Method $method -Uri $baseURI -Body $bodyjson
+            $result = Invoke-RestMethod -header $header -Method $method -Uri $baseURI -Body $bodyjson
         } elseif ($outfile) {
             Invoke-RestMethod -header $header -Method $method -Uri $baseURI -TimeoutSec $timeout -OutFile $outfile
             $result = $outfile
@@ -91,9 +82,6 @@ function Invoke-FLEXRestCall {
 
         $result = @($result)
     }
-
-    Write-Verbose "-- API Response --`n"
-    # $result | ConvertTo-Json -Depth 10 | Write-Verbose
 
     return $result
 }
