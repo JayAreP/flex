@@ -12,7 +12,7 @@ function New-FLEXClusterSDP {
         [ValidateSet(2,3,4,5,6,7,8)]
         [int] $minCnodes = $cnodes,
         [parameter(Mandatory)]
-        [ValidateSet('Large','Medium', 'Small', IgnoreCase = $false)]
+        [ValidateSet('Large','Medium', 'Small', 'P5', 'P10', 'P20', 'P40', 'P80', IgnoreCase = $false)]
         [string] $mnodeSize,
         [parameter()]
         [switch] $whatif,
@@ -24,13 +24,38 @@ function New-FLEXClusterSDP {
         [string] $flexContext = 'FLEXConnect'
     )
 
+    # Validate params
+    $Pv2Sizes = @('P5', 'P10', 'P20', 'P40', 'P80')
+    $Pv2SizeArray = @{}
+    $Pv2SizeArray.Add('P5','disks_5tib')
+    $Pv2SizeArray.Add('P10','disks_10tib')
+    $Pv2SizeArray.Add('P20','disks_20tib')
+    $Pv2SizeArray.Add('P40','disks_40tib')
+    $Pv2SizeArray.Add('P80','disks_80tib')
+
+    $Pv2IOPSArray = @{}
+    $Pv2IOPSArray.Add('40k','40000')
+    $Pv2IOPSArray.Add('80k','80000')
+
+    $LS3Sizes = @('Large','Medium', 'Small')
+
+    if ($Pv2) {
+        if ($Pv2Sizes -contains $mnodeSize) {   
+            $mnodeSize = $Pv2SizeArray[$mnodeSize]
+        } else {
+            $err = "Please specify a P-series size for Pv2 -mnodeSize"
+            return $err | Write-Error
+        }
+    } elseif ($LS3Sizes -notcontains $mnodeSize) {
+        $err = "Please specify either Small, Medium, or Large for L-series -mnodeSize"
+        return $err | Write-Error
+    }
+
     # body building
 
     $flexCluster = Get-FLEXCluster -flexContext $flexContext
     $flexParams = Get-FLEXClusterParameters -flexContext $flexContext
-    # $flexNetwork = Get-FLEXClusterNetwork -flexContext $flexContext
 
-    # https://20.46.228.216/api/v2/clusters/1072/sdps
     $endpoint = 'clusters/' + $flexCluster.id + '/sdps'
 
     $netArray = New-Object psobject
@@ -41,7 +66,7 @@ function New-FLEXClusterSDP {
     $netArray | Add-Member -MemberType NoteProperty -Name "system_ip" -Value $null
     $netArray | Add-Member -MemberType NoteProperty -Name "netmask" -Value $flexParams.netconf.netmask
 
-    # Produce the final data clause
+    # Produce the final payload
     $finalBody = New-Object psobject
 
     $finalBody | Add-Member -MemberType NoteProperty -Name "admin_password" -Value $flexParams.admin_password
@@ -81,7 +106,7 @@ function New-FLEXClusterSDP {
     $finalBody | Add-Member -MemberType NoteProperty -Name "min_cnodes" -Value $minCnodes
 
     if ($Pv2) {
-        $finalBody | Add-Member -MemberType NoteProperty -Name "single_cnode_iops" -Value $Pv2SingleNodeIOPS
+        $finalBody | Add-Member -MemberType NoteProperty -Name "single_cnode_iops" -Value $Pv2IOPSArray[$Pv2]
     }  else {
         $finalBody | Add-Member -MemberType NoteProperty -Name "single_cnode_iops" -Value 0
     }
