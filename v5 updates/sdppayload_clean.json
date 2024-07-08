@@ -1,0 +1,54 @@
+{
+  "admin_password": "NeedF13x1234!",
+  "admin_password_confirm": "",
+  "security_password": "NeedF13x1234!",
+  "security_password_confirm": "",
+  "viewer_password": "NeedF13x1234!",
+  "viewer_password_confirm": "",
+  "replication_password": "NeedF13x1234!",
+  "replication_password_confirm": "",
+  "company_name": "Silk",
+  "smtpconf": {
+    "auth": {
+      "enabled": true,
+      "security": "TLS",
+      "username": "CH4TrialsOnly@silk.us",
+      "password": "CH4Trial@2022"
+    },
+    "callhome_office_email": "callhome@clarity.silk.tech",
+    "callhome_system_alert_email": "alerts@cs.silk.tech",
+    "sender_email": "CH4TrialsOnly@silk.us",
+    "server": "smtp.office.com",
+    "port": 587
+  },
+  "dns_srvs": {},
+  "ntp_srvs": {},
+  "iscsi_over_mgmt": false,
+  "netconf": {
+    "dns_srvs": {
+      "dns_server1": null,
+      "dns_server2": null,
+      "dns_server3": null
+    },
+    "ntp_srvs": {
+      "ntp_server1": null,
+      "ntp_server2": null,
+      "ntp_server3": null
+    }
+  },
+  "cluster_id": "",
+  "enabled_checkpointing": false,
+  "cnodes": [
+    {
+      "cloud_node_type": "Production",
+      "amount": 2
+    }
+  ],
+  "mnodes": [
+    {
+      "cloud_node_type": "Small",
+      "amount": 1
+    }
+  ],
+  "k2_name": "TestSDP"
+}

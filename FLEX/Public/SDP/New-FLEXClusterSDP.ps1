@@ -19,6 +19,8 @@ function New-FLEXClusterSDP {
         [parameter()]
         [switch] $wait,
         [parameter()]
+        [switch] $iscsiOnMgmt,
+        [parameter()]
         [switch] $enableCheckPointing,
         [parameter()]
         [string] $flexContext = 'FLEXConnect'
@@ -83,7 +85,12 @@ function New-FLEXClusterSDP {
     $finalBody | Add-Member -MemberType NoteProperty -Name "netconf" -Value $netArray
     $finalBody | Add-Member -MemberType NoteProperty -Name "dns_srvs" -Value @{}
     $finalBody | Add-Member -MemberType NoteProperty -Name "ntp_srvs" -Value @{}
-    $finalBody | Add-Member -MemberType NoteProperty -Name "iscsi_over_mgmt" -Value $flexParams.iscsi_over_mgmt
+    if ($iscsiOnMgmt) {
+        $finalBody | Add-Member -MemberType NoteProperty -Name "iscsi_over_mgmt" -Value $true
+    } else {
+        $finalBody | Add-Member -MemberType NoteProperty -Name "iscsi_over_mgmt" -Value $flexParams.iscsi_over_mgmt 
+    }
+    
     $finalBody | Add-Member -MemberType NoteProperty -Name "k2_name" -Value $name
     $finalBody | Add-Member -MemberType NoteProperty -Name "cluster_id" -Value $null
 
