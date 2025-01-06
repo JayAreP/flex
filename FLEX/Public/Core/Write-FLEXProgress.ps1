@@ -8,7 +8,9 @@ function Write-FLEXProgress {
         [string] $flexContext = 'FLEXConnect'
     )
 
-    
+    $functionName = $MyInvocation.MyCommand.Name
+    Write-Verbose "-> $functionName"
+
     if ($taskId) {
         $flexTask = Get-FLEXTask -taskID $taskId
         if ($flexTask.state -eq "running") {
@@ -28,7 +30,6 @@ function Write-FLEXProgress {
         }
     }
     
-
     while ($progress -lt 100) {
         if ($message) {
             $activity = $message
@@ -54,5 +55,7 @@ function Write-FLEXProgress {
         }
         start-sleep 3
     }
+
+    Write-Progress -Activity $activity -Completed
 }
 

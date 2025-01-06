@@ -17,7 +17,8 @@ function Invoke-FLEXRestCall {
         [parameter()]
         [int] $timeout = 120
     )
-
+    $functionName = $MyInvocation.MyCommand.Name
+    Write-Verbose "-> $functionName"
     <#
     .DESCRIPTION
         Customer REST handler for the Silk FLEX API

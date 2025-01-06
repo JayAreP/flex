@@ -5,7 +5,9 @@ function Set-TitleCase {
         [parameter()]
         [switch] $toCaps
     )
-
+    $functionName = $MyInvocation.MyCommand.Name
+    Write-Verbose "-> $functionName"
+    
     if ($toCaps) {
         $results = $string.ToUpper()
     } else {

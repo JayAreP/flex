@@ -18,6 +18,9 @@ function Convert-FLEXResults {
     }
 
     process {
+        $functionName = $MyInvocation.MyCommand.Name
+        Write-Verbose "-> $functionName"
+        
         foreach ($r in $resultsObject) {
             $o = New-Object psobject
             if ($includeID) {

@@ -16,6 +16,9 @@ function Get-FLEXTaskLog {
     }
 
     Process {
+        $functionName = $MyInvocation.MyCommand.Name
+        Write-Verbose "-> $functionName"
+
         $versionStepping = Get-FLEXVersion -majorOnly
         if ($versionStepping -ge 3) {
             $endpoint = 'task4d/' + $taskID + '/logs'

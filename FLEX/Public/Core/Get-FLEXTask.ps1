@@ -20,6 +20,10 @@ function Get-FLEXTask {
     }
 
     process {
+
+        $functionName = $MyInvocation.MyCommand.Name
+        Write-Verbose "-> $functionName"
+
         if ($taskID) {
             $endpoint = $endpoint + '/' + $taskID
         }

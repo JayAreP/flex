@@ -5,6 +5,8 @@ function Connect-FLEX {
         [parameter(Mandatory)]
         [string] $server,
         [parameter()]
+        [switch] $skipVersionChecks,
+        [parameter()]
         [string] $flexContext = 'FLEXConnect'
 
     )
@@ -20,6 +22,9 @@ function Connect-FLEX {
         Connect-FLEX -server 104.34.19.202 -credentials $creds
     
     #>
+
+    $functionName = $MyInvocation.MyCommand.Name
+    Write-Verbose "-> $functionName"
 
     $body = New-Object -TypeName PSObject
     $body | Add-Member -MemberType NoteProperty -Name 'username' -Value $credentials.UserName
@@ -47,6 +52,11 @@ function Connect-FLEX {
     $o = New-Object psobject
     $o | Add-Member -MemberType NoteProperty -Name 'token' -Value $response
     $o | Add-Member -MemberType NoteProperty -Name 'FLEXEndpoint' -Value $server
+    if ($skipVersionChecks) {
+        $o | Add-Member -MemberType NoteProperty -Name 'SkipVersionCheck' -Value $true
+    } else {
+        $o | Add-Member -MemberType NoteProperty -Name 'SkipVersionCheck' -Value $false
+    }
 
     Set-Variable -Name $flexContext -Value $o -Scope Global
 

@@ -5,7 +5,9 @@ function New-FLEXAPIHeader {
         [parameter()]
         [switch] $post
     )
-
+    $functionName = $MyInvocation.MyCommand.Name
+    Write-Verbose "-> $functionName"
+    
     $result = @{"Authorization" = "Bearer "+ $token}
 
     if ($post) {

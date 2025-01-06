@@ -12,6 +12,8 @@ function Get-FLEXLogFile {
     }
 
     Process {
+        $functionName = $MyInvocation.MyCommand.Name
+        Write-Verbose "-> $functionName"
         $date = get-date -Format FileDateTimeUniversal
         $outfile = $path + "logs-" + $date + '.tar.gz'
         Invoke-FLEXRestCall -method GET -API $api -endpoint $endpoint -outfile $outfile

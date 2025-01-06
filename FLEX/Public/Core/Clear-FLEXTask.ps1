@@ -12,6 +12,8 @@ function Clear-FLEXTask {
     }
 
     process {
+        $functionName = $MyInvocation.MyCommand.Name
+        Write-Verbose "-> $functionName"
         $idarray = @($taskID)
         $o = New-Object psobject
         $o | Add-Member -MemberType NoteProperty -Name ids -Value $idArray

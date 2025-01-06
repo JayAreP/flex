@@ -5,5 +5,7 @@ function New-FLEXClassObject {
         [parameter(Mandatory)]
         [string] $class
     )
+    $functionName = $MyInvocation.MyCommand.Name
+    Write-Verbose "-> $functionName"
 
 }

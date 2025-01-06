@@ -5,12 +5,14 @@ function Get-FLEXVersion {
         [parameter()]
         [string] $flexContext = 'FLEXConnect'
     )
-
     begin {
         $endpoint = "version"
     }
 
     process {
+        $functionName = $MyInvocation.MyCommand.Name
+        Write-Verbose "-> $functionName"
+        
         $results = Invoke-FLEXRestCall -method GET -API v1 -endpoint $endpoint -flexContext 'flexconnect'
         if ($majorOnly) {
             $version = $results.version

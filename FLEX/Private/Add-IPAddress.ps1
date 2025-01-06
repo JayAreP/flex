@@ -6,6 +6,9 @@ function Add-IPAddress {
         [ipaddress] $delta
     )
 
+    $functionName = $MyInvocation.MyCommand.Name
+    Write-Verbose "-> $functionName"
+
     [ipaddress] $sum = $source.Address + $delta.Address
 
     return $sum
