@@ -62,6 +62,8 @@ function Connect-FLEX {
 
     $version = Get-FLEXVersion
     $o | Add-Member -MemberType NoteProperty -Name 'version' -Value $version
+    $cluster = Get-FLEXCluster
+    $o | Add-Member -MemberType NoteProperty -Name 'cloud' -Value $cluster.cluster_type
     Set-Variable -Name $flexContext -Value $o -Scope Global
 
     return $o

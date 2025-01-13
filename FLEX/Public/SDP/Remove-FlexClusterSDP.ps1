@@ -1,9 +1,10 @@
 function Remove-FLEXClusterSDP {
+    [CmdletBinding(
+        ConfirmImpact='High'
+    )]
     param(
         [parameter(Mandatory)]
         [string] $sdpName,
-        [parameter()]
-        [switch] $confirm,
         [parameter()]
         [switch] $force,
         [parameter()]
@@ -32,19 +33,22 @@ function Remove-FLEXClusterSDP {
         $api = 'v2'
     }
     
-
     process {
+        <#
         if ($confirm) {
             if (!$force) {
                 $o | Out-Host
                 Write-Host "-- Deleting this SDP in 30 seconds..."`n`n
                 Start-Sleep -Seconds 30
             }   
-            $results = Invoke-FLEXRestCall -method DELETE -API $api -endpoint $endpoint -flexContext $flexContext
+            
         } else {
             $err = "-- Please specify -confirm."
             return $err | Write-Error
         }
+        #>
+
+        $results = Invoke-FLEXRestCall -method DELETE -API $api -endpoint $endpoint -flexContext $flexContext
 
         if ($wait) {
             Write-FLEXProgress -message "Removing SDP - $name" -flexContext $flexContext
