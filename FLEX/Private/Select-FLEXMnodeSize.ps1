@@ -2,7 +2,10 @@ function Select-FLEXMnodeSize {
     param(
         [parameter(Mandatory)]
         [ValidateSet('P5', 'P10', 'P20', 'P40', 'P80', IgnoreCase = $false)]
-        [string] $mnodeSize
+        [string] $mnodeSize,
+        [parameter()]
+        [ValidateSet('40k','80k')]
+        [string] $Pv2IOPS = "80k"
     )
 
     $cloudType = $Global:FLEXConnect.cloud
@@ -25,5 +28,8 @@ function Select-FLEXMnodeSize {
         } 
     }
 
-    return $mnodeSKU
+    $o = new-object psobject
+    $o | Add-Member -MemberType NoteProperty -Name "mnodeSKU" -Value $mnodeSKU
+    $o | Add-Member -MemberType NoteProperty -Name "Pv2IOPS" -Value $Pv2IOPSArray[$Pv2IOPS]
+    return $o
 }

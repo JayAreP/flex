@@ -14,7 +14,9 @@ function Add-FLEXClusterPv2SDPMNode {
     )
 
     begin {
-        $mnodeSKU = Select-FLEXMnodeSize -mnodeSize $mnodeSize
+        # get current 40k/80k MNode SKU
+
+        $mnodeData = Select-FLEXMnodeSize -mnodeSize $mnodeSize 
 
         $flexCluster = Get-FLEXCluster -flexContext $flexContext
         
@@ -38,7 +40,7 @@ function Add-FLEXClusterPv2SDPMNode {
     process {
         # MNode object
         $mnodeObject = New-Object psobject
-        $mnodeObject | Add-Member -MemberType NoteProperty -Name 'cloud_node_type' -Value $mnodeSKU
+        $mnodeObject | Add-Member -MemberType NoteProperty -Name 'cloud_node_type' -Value $mnodeData.mnodeSKU
         $mnodeObject | Add-Member -MemberType NoteProperty -Name 'amount' -Value 1
 
         # Body building 

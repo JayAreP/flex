@@ -26,7 +26,7 @@ function New-FLEXClusterPv2SDP {
     # Validate params
     [int] $minCnodes = $cnodes
     
-    $mnodeSKU = Select-FLEXMnodeSize -mnodeSize $mnodeSize
+    $mnodeData = Select-FLEXMnodeSize -mnodeSize $mnodeSize -Pv2IOPS 40k
 
     # body building
 
@@ -81,14 +81,14 @@ function New-FLEXClusterPv2SDP {
     $cnodeBody | Add-Member -MemberType NoteProperty -Name "amount" -Value $cnodes
 
     $mnodeBody = New-Object psobject
-    $mnodeBody | Add-Member -MemberType NoteProperty -Name "cloud_node_type" -Value $mnodeSKU
+    $mnodeBody | Add-Member -MemberType NoteProperty -Name "cloud_node_type" -Value $mnodeData.mnodeSKU
     $mnodeBody | Add-Member -MemberType NoteProperty -Name "amount" -Value 1
 
     $finalBody | Add-Member -MemberType NoteProperty -Name "cnodes" -Value @($cnodeBody)
     $finalBody | Add-Member -MemberType NoteProperty -Name "mnodes" -Value @($mnodeBody)
     $finalBody | Add-Member -MemberType NoteProperty -Name "min_cnodes" -Value $minCnodes
 
-    $finalBody | Add-Member -MemberType NoteProperty -Name "single_cnode_iops" -Value $Pv2IOPSArray[$Pv2IOPS]
+    $finalBody | Add-Member -MemberType NoteProperty -Name "single_cnode_iops" -Value $mnodeData.Pv2IOPS
 
     # Submit the call 
     if ($whatif) {

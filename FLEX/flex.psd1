@@ -12,7 +12,7 @@
 RootModule = 'flex.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.80.34.1'
+ModuleVersion = '1.80.34.2'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -95,7 +95,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = @('Kaminario', 'Silk')
+        Tags = @('Kaminario', 'Silk', 'Flex')
 
         # A URL to the license for this module.
         # LicenseUri = ''
