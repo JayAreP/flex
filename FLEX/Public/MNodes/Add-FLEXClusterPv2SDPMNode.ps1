@@ -34,7 +34,6 @@ function Add-FLEXClusterPv2SDPMNode {
         }
         $endpoint = 'clusters/' + $flexCluster.id + '/sdps/' + $flexSDP.id + '/add_nodes'
         $api = 'v2'
-
     }
     
     process {

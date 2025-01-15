@@ -1,3 +1,29 @@
+<#
+    .SYNOPSIS
+    Function for connecting to a Flex deployment with this SDK.
+
+    .DESCRIPTION
+    This is the required first-run function to establish a session to an existing Flex deployment
+
+    .PARAMETER Server
+    [string] - Management IP or name for the Flex console.
+
+    .PARAMETER credentials
+    [pscredential] - Credential used to authenticate to flex.
+
+    .PARAMETER flexContext
+    [string] - Allows you to set a specific context when connecting to flex. Useful when connecting to multiple instances of flex.
+
+    .PARAMETER skipVersionChecks
+    [switch] - Skip the built in version validation between this SDK and the target Flex deployment.
+
+    .EXAMPLE
+    $creds = Get-Credential
+    Connect-Flex -Server 10.30.51.11 -credentials $creds
+
+    .LINK
+    https://github.com/JayAreP/flex
+#>
 function Connect-FLEX {
     param(
         [parameter(Mandatory)]

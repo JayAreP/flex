@@ -1,3 +1,45 @@
+<#
+    .SYNOPSIS
+    Function for Creating a standard (with dnodes) SDP.
+
+    .DESCRIPTION
+    This is the function to use to create a standard SDP. To create a Pv2 SDP, please use New-FLEXClusterPv2SDP.
+
+    .PARAMETER name
+    [string] - Management IP or name for the Flex console.
+
+    .PARAMETER cnodes
+    [int] (2,3,4,5,6,7,8) - Number of CNodes to create.
+
+    .PARAMETER mnodeSize
+    [string] ('Large','Medium','Small') - Size of the MNode to deploy with the SDP. The actual size depends on Cloud Provider. 
+
+    .PARAMETER readCacheEnabled
+    [switch] - WHere supported, will use a special CNode that supports read caching.
+
+    .PARAMETER whatif
+    [switch] - This does not actually create an SDP, but rather shows the API payload for the SDP creation. 
+
+    .PARAMETER wait
+    [switch] - This will automatically invoke Write-FlexProgress as part of the deployment. Can be usefull when writing scripts. 
+
+    .PARAMETER iscsiOnMgmt
+    [switch] - Experiemental. Do not use. 
+
+    .PARAMETER flexContext
+    [string] - Allows you to set a specific context when connecting to flex. Useful when connecting to multiple instances of flex.
+
+    .EXAMPLE
+    New-FLEXClusterSDP -cnodes 2 -mnodeSize Small
+    This will create a 2 CNode SDP with standard small MNode
+
+    .EXAMPLE
+    New-FLEXClusterSDP -cnodes 3 -mnodeSize Large -readCacheEnabled
+    This will create a 3 Cnode SDP with a Large MNode configured for read cache. 
+
+    .LINK
+    https://github.com/JayAreP/flex
+#>
 function New-FLEXClusterSDP {
     param(
         [parameter(Mandatory)]
