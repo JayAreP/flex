@@ -49,30 +49,11 @@ Get-FLEXTask
 # Show the FLEX networking configuration:
 Get-FLEXClusterNetwork
 
-# Create a c-node for an existing cluster:
-Add-FLEXClusterCloudCNode 
-
-# Create a Small m-node for an existing cluster:
-Add-FLEXClusterCloudMNode -size Small
-
-# Show all available nodes (those in the free pool)
-Get-FLEXClusterCNodes -showAvailable 
-
-# Move all FLEX Cluster c-node from the free pool to a registered SDP:
-Get-FLEXClusterCNodes -showAvailable | Move-FLEXClusterCNode -targetName "My SDP"
-
-# Invoke a wait on some operations (for better inherit sequencing). For example, this sequence will wait on the c-node to be created prior to the move operation:
-Add-FLEXClusterCloudCNode -wait
-Get-FLEXClusterCNodes -showAvailable | Move-FLEXClusterCNode -targetName "My SDP"
-
 # Delete all of the nodes in the free pool
 Get-FLEXClusterCNodes -showAvailable | Remove-FLEXClusterCloudCNode
 
 # Create a new SDP using available cnodes and mnodes
 New-FLEXClusterSDP -cnodes 2 -mnodeSize Small -name "My SDP 2"
-
-# Create a new SDP using available cnodes and mnodes, this instructs flex to first create the required nodes. This is a one-line SDP creation from nothing. 
-New-FLEXClusterSDP -cnodes 2 -mnodeSize Small -name "My SDP 3" -generateNodes
 
 # Use the bespoke REST handler for quick REST call modeling:
 Invoke-FLEXRestCall -method GET -API v1 -endpoint 'pages/nodes'
@@ -80,57 +61,4 @@ Invoke-FLEXRestCall -method GET -API v1 -endpoint 'pages/nodes'
 
 ### Verbosity:  
 
-Specify -Verbose on any cmdlet to see the entire API process, including endoint declarations, and json statements. You can use this to help model API calls directly or troubleshoot. 
-
-```powershell
-Get-FLEXClusterCNodes -showAvailable | Remove-FLEXClusterCloudCNode -Verbose
-```
-
-Will return yellow verbose messages showing the entire API call and payload:
-```
-VERBOSE: {
-  "Authorization": "Bearer  3q1tMyhtsi1jiC6sFOWSQqBKT00Rg3OD5HustDwYtL6"
-}
-VERBOSE: {
-  "node_type": "cnode",
-  "node_id": "flex-cluster-1001-cnode-4",
-  "cluster_id": "1001"
-}
-VERBOSE: POST https://54.102.19.180/api/v1/tasks/remove_from_freepool with 96-byte payload
-VERBOSE: received 1142-byte response of content type application/json
-VERBOSE: Content encoding: utf-8
-
-VERBOSE: {
-  "Authorization": "Bearer  3q1tMyhtsi1jiC6sFOWSQqBKT00Rg3OD5HustDwYtL6"
-}
-VERBOSE: {
-  "node_type": "cnode",
-  "node_id": "flex-cluster-1001-cnode-8",
-  "cluster_id": "1001"
-}
-VERBOSE: POST https://54.102.19.180/api/v1/tasks/remove_from_freepool with 96-byte payload
-VERBOSE: received 1142-byte response of content type application/json
-VERBOSE: Content encoding: utf-8
-VERBOSE: {
-  "Authorization": "Bearer  3q1tMyhtsi1jiC6sFOWSQqBKT00Rg3OD5HustDwYtL6"
-}
-VERBOSE: {
-  "node_type": "cnode",
-  "node_id": "flex-cluster-1001-cnode-9",
-  "cluster_id": "1001"
-}
-VERBOSE: POST https://54.102.19.180/api/v1/tasks/remove_from_freepool with 96-byte payload
-VERBOSE: received 1142-byte response of content type application/json
-VERBOSE: Content encoding: utf-8
-```
-
-And then return the stardard response:
-```
-_id                    _version _obj
----                    -------- ----
-3WWiAfNDkbqq9CmFgZIbRX        1 @{plot=; state=pending; progress_pct=0; creator_id=kaminario; update_ts_millis=1601996377310; create_ts_millis=1601996377310; steps=System.Object[]; labels=; type=remove-node-…
-2sEHYj1ooPBO9UUGk0pz0L        1 @{plot=; state=pending; progress_pct=0; creator_id=kaminario; update_ts_millis=1601996377584; create_ts_millis=1601996377584; steps=System.Object[]; labels=; type=remove-node-…
-1jxQowXYtgN30iQhc9tGEx        1 @{plot=; state=pending; progress_pct=0; creator_id=kaminario; update_ts_millis=1601996377862; create_ts_millis=1601996377862; steps=System.Object[]; labels=; type=remove-node-…
-```
-
-```
+Specify `-Verbose` on any cmdlet to see the entire API process, including endoint declarations, and json API payloads. You can use this to help model API calls directly or troubleshoot. 
