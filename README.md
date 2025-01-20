@@ -26,7 +26,7 @@ Select Install location:
 
 ### Example usage: 
 
-This module requires Powershell 4.x or above and was developed on PowerShell Core Preview 7. 
+This module requires Powershell 4.x or above and was developed on PowerShell Core 7. 
 After importing, you can connect to the Silk Flex Platform using a conventional PowerShell credential object to acquire an auth token. 
 ```powershell
 $creds = get-credential
