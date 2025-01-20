@@ -49,11 +49,11 @@ Get-FLEXTask
 # Show the FLEX networking configuration:
 Get-FLEXClusterNetwork
 
-# Delete all of the nodes in the free pool
-Get-FLEXClusterCNodes -showAvailable | Remove-FLEXClusterCloudCNode
-
 # Create a new SDP using available cnodes and mnodes
-New-FLEXClusterSDP -cnodes 2 -mnodeSize Small -name "My SDP 2"
+New-FLEXClusterSDP -cnodes 2 -mnodeSize Small -name "MySDP"
+
+# Add a CNode to an existing SDP:
+Add-FLEXClusterSDPCNode -sdpName "MySDP" -count 1
 
 # Use the bespoke REST handler for quick REST call modeling:
 Invoke-FLEXRestCall -method GET -API v1 -endpoint 'pages/nodes'
