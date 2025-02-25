@@ -36,18 +36,6 @@ function Connect-FLEX {
         [string] $flexContext = 'FLEXConnect'
 
     )
-    <#
-    .DESCRIPTION
-        Function for connecting to a Silk FLEX deployment
-
-    .SYNOPSIS
-        This function allows you to connect to a flex deployment using a standard PowerSHell credential object. 
-    
-    .EXAMPLE
-        $creds = get-credential
-        Connect-FLEX -server 104.34.19.202 -credentials $creds
-    
-    #>
 
     $functionName = $MyInvocation.MyCommand.Name
     Write-Verbose "-> $functionName"

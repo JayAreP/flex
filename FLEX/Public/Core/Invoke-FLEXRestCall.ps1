@@ -1,8 +1,11 @@
 function Invoke-FLEXRestCall {
     param(
         [parameter(Mandatory)] 
-        [ValidateSet('GET','POST','PATCH','DELETE')]
+        [ValidateSet('GET','POST','PATCH','DELETE','PUT')]
         [string] $method,
+        [parameter()] 
+        [ValidateSet('ocie','hostess', IgnoreCase = $false)]
+        [string] $APIPrefix,
         [parameter(Mandatory)] 
         [ValidateSet('v1','v2', IgnoreCase = $false)]
         [string] $API,
@@ -42,7 +45,12 @@ function Invoke-FLEXRestCall {
     }
 
     $token = $context.token.access_token
-    $baseURI = 'https://' + $context.FLEXEndpoint + '/api/' + $API + '/' + $endpoint 
+    if ($APIPrefix) {
+        $baseURI = 'https://' + $context.FLEXEndpoint + '/api/' + $APIPrefix + '/' + $API + '/' + $endpoint 
+    } else {
+        $baseURI = 'https://' + $context.FLEXEndpoint + '/api/' + $API + '/' + $endpoint 
+    }
+    
     $verboseResponse = "Final request URI --- " + $baseURI
     Write-Verbose $verboseResponse
 

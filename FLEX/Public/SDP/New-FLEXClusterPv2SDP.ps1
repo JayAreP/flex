@@ -17,6 +17,9 @@
     .PARAMETER Pv2IOPS
     [string] ('40k','80k') - IOPS rate for the Pv2 MNode. 
 
+    .PARAMETER minCnodes
+    [int] (2,3,4,5,6,7,8) - Min number of CNodes for the SDP.
+
     .PARAMETER readCacheEnabled
     [switch] - Where supported, will use a special CNode that supports read caching.
 
@@ -58,6 +61,9 @@ function New-FLEXClusterPv2SDP {
         [ValidateSet('P5', 'P10', 'P20', 'P40', 'P80', IgnoreCase = $false)]
         [string] $mnodeSize,
         [parameter()]
+        [ValidateSet(2,3,4,5,6,7,8)]
+        [int] $minCnodes = 2,
+        [parameter()]
         [switch] $readCacheEnabled,
         [parameter()]
         [switch] $whatif,
@@ -70,7 +76,6 @@ function New-FLEXClusterPv2SDP {
     )
 
     # Validate params
-    [int] $minCnodes = $cnodes
     
     $mnodeData = Select-FLEXMnodeSize -mnodeSize $mnodeSize -Pv2IOPS 40k
 
