@@ -14,11 +14,11 @@ function New-FLEXEchoDBSnapShot {
 
     process {
         $o = New-Object psobject
-        $o | Add-Member -MemberType NoteProperty 'database_ids' -Name -Value @($id)
+        $o | Add-Member -MemberType NoteProperty -Name 'database_ids' -Value @($id)
         $o | Add-Member -MemberType NoteProperty -Name 'source_host_id' -Value $hostID
-        # $o | Add-Member -MemberType NoteProperty -Name 'destinations' -Value @()
+        $o | Add-Member -MemberType NoteProperty -Name 'destinations' -Value @()
 
-        $results = Invoke-FLEXRestCall -API v1 -APIPrefix ocie -endpoint $endpoint -method POST -flexContext $flexContext 
+        $results = Invoke-FLEXRestCall -API v1 -APIPrefix ocie -endpoint $endpoint -method POST -body $o -flexContext $flexContext 
         return $results
     }
 

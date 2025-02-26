@@ -3,9 +3,9 @@ function New-FLEXEchoDBClone {
         [parameter(Mandatory,ValueFromPipelineByPropertyName)]
         [string] $id,
         [parameter()]
-        [array] $hostID,
+        [string] $hostID,
         [parameter()]
-        [string] $DestinationHostID,
+        [array] $DestinationHostID,
         [parameter()]
         [string] $DestinationDatabaseName,
         [parameter()]
@@ -26,7 +26,7 @@ function New-FLEXEchoDBClone {
 
         $destinationArray = @()
 
-        foreach ($h in $hostID) {
+        foreach ($h in $DestinationHostID) {
             <#
             Maybe need to do the following:
 
@@ -40,15 +40,15 @@ function New-FLEXEchoDBClone {
             $destination | Add-Member -MemberType NoteProperty -Name db_id -Value $destinationID # check this id formulation
             $destination | Add-Member -MemberType NoteProperty -Name db_name -Value $DestinationDatabaseName
 
-            $destinationInfo += $destination
+            $destinationArray += $destination
         }
 
         $o = New-Object psobject
-        $o | Add-Member -MemberType NoteProperty 'database_ids' -Name -Value @($id)
-        $o | Add-Member -MemberType NoteProperty -Name 'source_host_id' -Value $hostID
+        $o | Add-Member -MemberType NoteProperty -Name 'database_ids' -Value @($id)
         $o | Add-Member -MemberType NoteProperty -Name 'destinations' -Value $destinationArray
+        $o | Add-Member -MemberType NoteProperty -Name 'source_host_id' -Value $hostID
 
-        $results = Invoke-FLEXRestCall -API v1 -APIPrefix ocie -endpoint $endpoint -method POST -flexContext $flexContext 
+        $results = Invoke-FLEXRestCall -API v1 -APIPrefix ocie -endpoint $endpoint -method POST -body $o -flexContext $flexContext 
         return $results
     }
 
@@ -60,21 +60,31 @@ https://4.227.137.180/api/ocie/v1/clone
 
 {
   "database_ids": [
-    "6"
+    "7"
   ],
   "destinations": [
     {
-      "host_id": "echo01",
-      "db_id": "6",
-      "db_name": "AdventureWorks04"
-    },
-    {
       "host_id": "echo02",
-      "db_id": "6",
-      "db_name": "AdventureWorks05"
+      "db_id": "7",
+      "db_name": "AdventureWorks03"
     }
   ],
   "source_host_id": "echo01"
+}
+
+
+{
+  "database_ids": [
+    "6"
+  ],
+  "source_host_id": "echo01",
+  "destinations": [
+    {
+      "host_id": "echo02",
+      "db_id": "6",
+      "db_name": "testdb01"
+    }
+  ]
 }
 
 #>

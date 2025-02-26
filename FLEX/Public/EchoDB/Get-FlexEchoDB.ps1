@@ -10,7 +10,7 @@ function Get-FLexEchoDB {
         [string] $flexContext = 'FLEXConnect'
     )
 
-    $results = (Get-FLEXEchoTopology -flexContext $flexContext).databases
+    $results = (Get-FLEXEchoTopology -flexContext $flexContext).databases | Where-Object {!$_.parent}
 
     if ($name) {
         $results = $results | Where-Object {$_.name -eq $name}
