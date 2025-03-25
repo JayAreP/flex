@@ -16,7 +16,7 @@ function Get-FLEXEchoHost {
     }
 
     # $results = Invoke-FLEXRestCall -API v1 -endpoint topology -method get -APIPrefix ocie 
-    $results = Invoke-FLEXRestCall -API v1 -endpoint $endpoint -method get -APIPrefix hostess -flexContext $flexContext
+    $results = Invoke-FLEXRestCall -flexAlias -API v1 -endpoint $endpoint -method get -flexContext $flexContext 
 
     if ($DBVendor) {
         $results = $results | Where-Object {$_.db_vendor -eq $DBVendor}

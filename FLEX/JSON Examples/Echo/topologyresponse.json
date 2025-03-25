@@ -1,0 +1,97 @@
+[
+    {
+        "host": {
+            "id": "echo01",
+            "name": "",
+            "last_seen_ts": 1740514264,
+            "is_connected": false,
+            "os": "",
+            "agent_version": "",
+            "iqn": "",
+            "cloud_vendor": "UNKNOWN",
+            "vm_id": "",
+            "cidrs": [],
+            "instance_type": "",
+            "cpus": 0,
+            "memory": 0,
+            "location": "",
+            "zone": ""
+        },
+        "sdps": [],
+        "databases": []
+    },
+    {
+        "host": {
+            "id": "echo02",
+            "name": "echo02",
+            "last_seen_ts": 1740514349,
+            "is_connected": true,
+            "os": "Windows Server 2022 Datacenter",
+            "agent_version": "1.0.14.1",
+            "iqn": "iqn.1991-05.com.microsoft:echo02",
+            "cloud_vendor": "AZURE",
+            "vm_id": "de2cb189-1572-4e0a-9dc2-a2f094dcd89b",
+            "cidrs": [
+                "10.80.2.11/24",
+                "10.80.3.10/24"
+            ],
+            "instance_type": "Standard_D8ds_v5",
+            "cpus": 0,
+            "memory": 0,
+            "location": "eastus",
+            "zone": "1"
+        },
+        "sdps": [
+            {
+                "sdp_id": "134409",
+                "host_name": "echo02"
+            }
+        ],
+        "databases": [
+            {
+                "id": "2",
+                "name": "tempdb",
+                "vendor": "mssql",
+                "files": [
+                    {
+                        "sdp_id": "134409",
+                        "name": "tempdev",
+                        "size_mb": 8,
+                        "kind": "data",
+                        "volume_id": 11,
+                        "volume_name": "echo02-TempDB",
+                        "volume_group_id": 8,
+                        "volume_group_name": "echo02-vg",
+                        "volume_scsi_sn": "1344090006"
+                    },
+                    {
+                        "sdp_id": "134409",
+                        "name": "templog",
+                        "size_mb": 8,
+                        "kind": "log",
+                        "volume_id": 11,
+                        "volume_name": "echo02-TempDB",
+                        "volume_group_id": 8,
+                        "volume_group_name": "echo02-vg",
+                        "volume_scsi_sn": "1344090006"
+                    },
+                    {
+                        "sdp_id": "134409",
+                        "name": "temp2",
+                        "size_mb": 8,
+                        "kind": "data",
+                        "volume_id": 11,
+                        "volume_name": "echo02-TempDB",
+                        "volume_group_id": 8,
+                        "volume_group_name": "echo02-vg",
+                        "volume_scsi_sn": "1344090006"
+                    }
+                ],
+                "db_snapshots": [],
+                "db_snapshot_allowed": true,
+                "db_snapshot_disallowed_reason": "",
+                "parent": null
+            }
+        ]
+    }
+]

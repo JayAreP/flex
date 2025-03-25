@@ -11,9 +11,8 @@ function Remove-FLEXEchoHost {
     }
 
     process {
-        $results = Invoke-FLEXRestCall -API v1 -APIPrefix hostess -endpoint $endpoint -method DELETE -flexContext $flexContext
+        $results = Invoke-FLEXRestCall -flexAlias -API v1 -endpoint $endpoint -method DELETE -flexContext $flexContext
         return $results
     }
-
 }
 

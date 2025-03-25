@@ -14,6 +14,8 @@ function Invoke-FLEXRestCall {
         [parameter()] 
         [PSCustomObject] $body,
         [parameter()] 
+        [switch] $flexAlias,
+        [parameter()] 
         [string] $outfile,
         [parameter()]
         [string] $flexContext = 'FLEXConnect',
@@ -44,11 +46,20 @@ function Invoke-FLEXRestCall {
         return $err | Write-Error
     }
 
+    <# 
+    Replace this with a New-FLEXAPIURI function request. 
+    #>
+    if ($flexAlias) {
+        $apiURI = '/flex/api/'
+    } else {
+        $apiURI = '/api/'
+    }
+
     $token = $context.token.access_token
     if ($APIPrefix) {
-        $baseURI = 'https://' + $context.FLEXEndpoint + '/api/' + $APIPrefix + '/' + $API + '/' + $endpoint 
+        $baseURI = 'https://' + $context.FLEXEndpoint + $apiURI + $APIPrefix + '/' + $API + '/' + $endpoint 
     } else {
-        $baseURI = 'https://' + $context.FLEXEndpoint + '/api/' + $API + '/' + $endpoint 
+        $baseURI = 'https://' + $context.FLEXEndpoint + $apiURI + $API + '/' + $endpoint 
     }
     
     $verboseResponse = "Final request URI --- " + $baseURI

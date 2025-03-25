@@ -5,9 +5,8 @@ function Get-FLEXEchoDBSnapShot {
         [parameter()]
         [string] $flexContext = 'FLEXConnect'
     )
-
+    
     begin {
-
     }
     
     process {

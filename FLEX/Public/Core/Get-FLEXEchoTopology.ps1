@@ -4,7 +4,7 @@ function Get-FLEXEchoTopology {
         [string] $flexContext = 'FLEXConnect'
     )
 
-    $results = invoke-flEXRestCall -API v1 -endpoint topology -method get -APIPrefix ocie -flexContext $flexContext
+    $results = invoke-flEXRestCall -APIPrefix ocie -API v1 -endpoint topology -method get -flexContext $flexContext
 
     return $results
 }
