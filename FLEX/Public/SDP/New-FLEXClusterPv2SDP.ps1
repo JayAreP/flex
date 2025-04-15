@@ -36,11 +36,11 @@
     [string] - Allows you to set a specific context when connecting to flex. Useful when connecting to multiple instances of flex.
 
     .EXAMPLE
-    New-FLEXClusterSDP -cnodes 2 -mnodeSize P5
+    New-FLEXClusterPv2SDP -cnodes 2 -mnodeSize P5
     This will create a 2 CNode SDP with a Pv2 MNode of 5TiB
 
     .EXAMPLE
-    New-FLEXClusterSDP -cnodes 3 -mnodeSize P20 -readCacheEnabled
+    New-FLEXClusterPv2SDP -cnodes 3 -mnodeSize P20 -readCacheEnabled
     This will create a 3 Cnode SDP with a 20TiB MNode configured for read cache. 
 
     .LINK
@@ -77,7 +77,7 @@ function New-FLEXClusterPv2SDP {
 
     # Validate params
     
-    $mnodeData = Select-FLEXMnodeSize -mnodeSize $mnodeSize -Pv2IOPS 40k
+    $mnodeData = Select-FLEXMnodeSize -mnodeSize $mnodeSize -Pv2IOPS $Pv2IOPS
 
     # body building
 
