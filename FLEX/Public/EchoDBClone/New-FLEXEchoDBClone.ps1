@@ -21,7 +21,7 @@ function New-FLEXEchoDBClone {
     process {
       $idArray += $id
 
-      $dbInfo = Get-FLexEchoDB -id $id -flexContext $flexContext
+      $dbInfo = Get-FLexEchoDB -id $id -hostID $hostID -flexContext $flexContext
 
       [string] $DestinationDatabaseName = $dbInfo.name
 
