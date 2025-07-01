@@ -30,7 +30,7 @@ function New-FLEXEchoDBClone {
       $destinationID = $id # placeholder
 
       $destination = New-Object psobject
-      $destination | Add-Member -MemberType NoteProperty -Name host_id -Value $h
+      $destination | Add-Member -MemberType NoteProperty -Name host_id -Value $DestinationHostID
       $destination | Add-Member -MemberType NoteProperty -Name db_id -Value $destinationID # check this id formulation
       $destination | Add-Member -MemberType NoteProperty -Name db_name -Value $DestinationDatabaseName
 

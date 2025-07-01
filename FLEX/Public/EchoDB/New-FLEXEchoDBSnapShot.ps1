@@ -25,6 +25,5 @@ function New-FLEXEchoDBSnapShot {
       $results = Invoke-FLEXRestCall -API v1 -APIPrefix ocie -endpoint $endpoint -method POST -body $o -flexContext $flexContext 
       return $results
     }
-
 }
 
