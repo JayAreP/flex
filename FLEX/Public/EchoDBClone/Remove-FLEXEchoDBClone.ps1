@@ -2,7 +2,7 @@ function Remove-FLEXEchoDBClone {
     param(
         [parameter(Mandatory)]
         [string] $hostID,
-        [parameter(Mandatory,ValueFromPipelineByPropertyName)]
+        [parameter(Mandatory)]
         [string] $id,
         [parameter()]
         [string] $flexContext = 'FLEXConnect'
