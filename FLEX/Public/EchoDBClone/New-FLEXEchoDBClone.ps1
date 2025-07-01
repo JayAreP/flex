@@ -5,7 +5,7 @@ function New-FLEXEchoDBClone {
         [parameter()]
         [string] $hostID,
         [parameter()]
-        [array] $DestinationHostID,
+        [string] $DestinationHostID,
         [parameter()]
         [string] $DestinationDatabaseName,
         [parameter()]
@@ -13,78 +13,39 @@ function New-FLEXEchoDBClone {
     )
 
     begin {
-        $endpoint = 'clone'
+      $endpoint = 'clone'
+      $idArray = @()
+      $destinationArray = @()
     }
 
     process {
+      $idArray += $id
 
-        $dbInfo = Get-FLexEchoDB -id $id -flexContext $flexContext
+      $dbInfo = Get-FLexEchoDB -id $id -flexContext $flexContext
 
-        if (!$DestinationDatabaseName) {
-            $DestinationDatabaseName = $dbInfo.name
-        }
+      if (!$DestinationDatabaseName) {
+        $DestinationDatabaseName = $dbInfo.name
+      }
 
-        $destinationArray = @()
+      $destinationID = $id # placeholder
 
-        foreach ($h in $DestinationHostID) {
-            <#
-            Maybe need to do the following:
+      $destination = New-Object psobject
+      $destination | Add-Member -MemberType NoteProperty -Name host_id -Value $h
+      $destination | Add-Member -MemberType NoteProperty -Name db_id -Value $destinationID # check this id formulation
+      $destination | Add-Member -MemberType NoteProperty -Name db_name -Value $DestinationDatabaseName
 
-            $destinationID = New-FLEXEchoDBID -flexContext $flexContext
-            #>
+      $destinationArray += $destination
+    
+    } 
 
-            $destinationID = $id # placeholder
+    end {
+      $o = New-Object psobject
+      $o | Add-Member -MemberType NoteProperty -Name 'database_ids' -Value @($idArray)
+      $o | Add-Member -MemberType NoteProperty -Name 'destinations' -Value $destinationArray
+      $o | Add-Member -MemberType NoteProperty -Name 'source_host_id' -Value $hostID
 
-            $destination = New-Object psobject
-            $destination | Add-Member -MemberType NoteProperty -Name host_id -Value $h
-            $destination | Add-Member -MemberType NoteProperty -Name db_id -Value $destinationID # check this id formulation
-            $destination | Add-Member -MemberType NoteProperty -Name db_name -Value $DestinationDatabaseName
-
-            $destinationArray += $destination
-        }
-
-        $o = New-Object psobject
-        $o | Add-Member -MemberType NoteProperty -Name 'database_ids' -Value @($id)
-        $o | Add-Member -MemberType NoteProperty -Name 'destinations' -Value $destinationArray
-        $o | Add-Member -MemberType NoteProperty -Name 'source_host_id' -Value $hostID
-
-        $results = Invoke-FLEXRestCall -API v1 -APIPrefix ocie -endpoint $endpoint -method POST -body $o -flexContext $flexContext 
-        return $results
+      $results = Invoke-FLEXRestCall -API v1 -APIPrefix ocie -endpoint $endpoint -method POST -body $o -flexContext $flexContext 
+      return $results
     }
-
 }
 
-
-<#
-https://4.227.137.180/api/ocie/v1/clone
-
-{
-  "database_ids": [
-    "7"
-  ],
-  "destinations": [
-    {
-      "host_id": "echo02",
-      "db_id": "7",
-      "db_name": "AdventureWorks03"
-    }
-  ],
-  "source_host_id": "echo01"
-}
-
-
-{
-  "database_ids": [
-    "6"
-  ],
-  "source_host_id": "echo01",
-  "destinations": [
-    {
-      "host_id": "echo02",
-      "db_id": "6",
-      "db_name": "testdb01"
-    }
-  ]
-}
-
-#>
