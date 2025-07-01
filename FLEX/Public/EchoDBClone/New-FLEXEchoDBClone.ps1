@@ -23,10 +23,10 @@ function New-FLEXEchoDBClone {
 
       $dbInfo = Get-FLexEchoDB -id $id -flexContext $flexContext
 
-      $DestinationDatabaseName = $dbInfo.name
+      [string] $DestinationDatabaseName = $dbInfo.name
 
       if ($DestinationDBSuffix) {
-        $DestinationDatabaseName = $DestinationDatabaseName + '-' + $DestinationDBSuffix
+        [string] $DestinationDatabaseName = $DestinationDatabaseName + $DestinationDBSuffix
       }
 
       $destinationID = $id # placeholder

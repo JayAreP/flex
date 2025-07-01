@@ -27,12 +27,3 @@ function Remove-FLEXEchoDBClone {
 
 }
 
-<#
-DELETE https://4.227.137.180/api/ocie/v1/clone
-
-{
-  "host_id": "echo02",
-  "database_id": "6"
-}
-
-#>
