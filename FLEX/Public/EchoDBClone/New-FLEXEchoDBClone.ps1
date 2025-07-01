@@ -26,7 +26,7 @@ function New-FLEXEchoDBClone {
       [string] $DestinationDatabaseName = $dbInfo.name
 
       if ($DestinationDBSuffix) {
-        [string] $DestinationDatabaseName = $DestinationDatabaseName + $DestinationDBSuffix
+        $DestinationDatabaseName = $DestinationDatabaseName + $DestinationDBSuffix
       }
 
       $destinationID = $id # placeholder
