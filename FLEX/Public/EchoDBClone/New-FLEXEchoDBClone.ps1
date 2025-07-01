@@ -2,12 +2,12 @@ function New-FLEXEchoDBClone {
     param(
         [parameter(Mandatory,ValueFromPipelineByPropertyName)]
         [string] $id,
-        [parameter()]
+        [parameter(Mandatory)]
         [string] $hostID,
-        [parameter()]
+        [parameter(Mandatory)]
         [string] $DestinationHostID,
         [parameter()]
-        [string] $DestinationDatabaseName,
+        [string] $DestinationDBSuffix,
         [parameter()]
         [string] $flexContext = 'FLEXConnect'
     )
@@ -23,8 +23,10 @@ function New-FLEXEchoDBClone {
 
       $dbInfo = Get-FLexEchoDB -id $id -flexContext $flexContext
 
-      if (!$DestinationDatabaseName) {
-        $DestinationDatabaseName = $dbInfo.name
+      $DestinationDatabaseName = $dbInfo.name
+
+      if ($DestinationDBSuffix) {
+        $DestinationDatabaseName = $DestinationDatabaseName + '-' + $DestinationDBSuffix
       }
 
       $destinationID = $id # placeholder
