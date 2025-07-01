@@ -2,7 +2,7 @@ function New-FLEXEchoDBSnapShot {
     param(
         [parameter(Mandatory,ValueFromPipelineByPropertyName)]
         [array] $id,
-        [parameter()]
+        [parameter(Mandatory)]
         [string] $hostID,
         [parameter()]
         [string] $flexContext = 'FLEXConnect'
