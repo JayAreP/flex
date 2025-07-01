@@ -1,4 +1,4 @@
-function GET-FLEXEchoDBClone {
+function Get-FLEXEchoDBClone {
     param(
         [parameter()]
         [string] $name,
