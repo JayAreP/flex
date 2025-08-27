@@ -1,4 +1,4 @@
-function Get-FLexEchoSDP {
+function Get-FlexEchoSDP {
     param(
         [parameter()]
         [string] $flexContext = 'FLEXConnect'

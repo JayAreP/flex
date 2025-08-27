@@ -1,4 +1,4 @@
-function Get-FLexEchoDB {
+function Get-FlexEchoDB {
     param(
         [parameter()]
         [string] $name,
