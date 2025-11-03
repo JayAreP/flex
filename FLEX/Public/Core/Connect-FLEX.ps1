@@ -25,41 +25,52 @@
     https://github.com/JayAreP/flex
 #>
 function Connect-FLEX {
+    [CmdletBinding(DefaultParameterSetName = 'credentials')]
     param(
-        [parameter(Mandatory)]
+        [parameter(Mandatory = $true, ParameterSetName = 'credentials')]
         [PSCredential] $credentials,
+        [parameter(Mandatory = $true, ParameterSetName = 'token')]
+        [string] $token,
         [parameter(Mandatory)]
         [string] $server,
         [parameter()]
         [switch] $skipVersionChecks,
         [parameter()]
         [string] $flexContext = 'FLEXConnect'
-
     )
 
     $functionName = $MyInvocation.MyCommand.Name
     Write-Verbose "-> $functionName"
 
-    $body = New-Object -TypeName PSObject
-    $body | Add-Member -MemberType NoteProperty -Name 'username' -Value $credentials.UserName
-    $body | Add-Member -MemberType NoteProperty -Name 'password' -Value $credentials.GetNetworkCredential().password
+    if ($PSCmdlet.ParameterSetName -eq 'credentials') {
+        $body = New-Object -TypeName PSObject
+        $body | Add-Member -MemberType NoteProperty -Name 'username' -Value $credentials.UserName
+        $body | Add-Member -MemberType NoteProperty -Name 'password' -Value $credentials.GetNetworkCredential().password
 
-    $bodyString = 'password=' + $credentials.GetNetworkCredential().password + '&username=' + $credentials.UserName
+        $bodyString = 'password=' + $credentials.GetNetworkCredential().password + '&username=' + $credentials.UserName
 
-    # Replace with proper REST function at some point...
-    $fullURI = 'https://' + $server + '/api/v1/auth/local/login'
+        # Replace with proper REST function at some point...
+        $fullURI = 'https://' + $server + '/api/v1/auth/local/login'
 
-    if ($PSVersionTable.PSEdition -eq 'Core') {
-        $response = Invoke-RestMethod -SkipCertificateCheck -Method POST -Uri $fullURI -Body $bodyString
-    } elseif ($PSVersionTable.PSEdition -eq 'Desktop') {
-        if ([System.Net.ServicePointManager]::CertificatePolicy -notlike 'TrustAllCertsPolicy') { 
-            Write-Verbose "Correcting certificate policy"
-            Unblock-CertificatePolicy
+        if ($PSVersionTable.PSEdition -eq 'Core') {
+            $response = Invoke-RestMethod -SkipCertificateCheck -Method POST -Uri $fullURI -Body $bodyString
+        } elseif ($PSVersionTable.PSEdition -eq 'Desktop') {
+            if ([System.Net.ServicePointManager]::CertificatePolicy -notlike 'TrustAllCertsPolicy') { 
+                Write-Verbose "Correcting certificate policy"
+                Unblock-CertificatePolicy
+            }
+            if ([Net.ServicePointManager]::SecurityProtocol -notmatch 'Tls12') {
+                [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol + 'Tls12'
+            }
+            $response = Invoke-RestMethod -Method POST -Uri $fullURI -Body $bodyString
         }
-        if ([Net.ServicePointManager]::SecurityProtocol -notmatch 'Tls12') {
-            [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol + 'Tls12'
-        }
-        $response = Invoke-RestMethod -Method POST -Uri $fullURI -Body $bodyString
+    }
+
+    if ($PSCmdlet.ParameterSetName -eq 'token') {
+        $expiresOn = (get-date).AddYears(100)
+        $response = New-Object psobject
+        $response | Add-Member -MemberType NoteProperty -Name 'access_token' -Value $token
+        $response | Add-Member -MemberType NoteProperty -Name 'expiresOn' -Value $expiresOn.ToString()
     }
 
     # Store in Global var scope. 

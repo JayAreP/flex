@@ -25,10 +25,12 @@ function Get-FLEXTask {
         Write-Verbose "-> $functionName"
 
         if ($taskID) {
-            $endpoint = $endpoint + '/' + $taskID
+            $endpointURI = $endpoint + '/' + $taskID
+        } else {
+            $endpointURI = $endpoint
         }
     
-        $results = Invoke-FLEXRestCall -method GET -API $api -endpoint $endpoint -flexContext $flexContext
+        $results = Invoke-FLEXRestCall -method GET -API $api -endpoint $endpointURI -flexContext $flexContext
 
         # Parsing this kinda stupid considering I could have written a class for this much more easily. Will do just that later. 
 
