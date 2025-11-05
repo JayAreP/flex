@@ -3,9 +3,9 @@ function Set-FLEXEchoDBClone {
         [parameter(Mandatory,ValueFromPipelineByPropertyName)]
         [string] $echoDatabaseName,
         [parameter(Mandatory)]
-        [string] $snapshotId,
-        [parameter(Mandatory)]
         [string] $hostID,
+        [parameter()]
+        [string] $snapshotId,
         [parameter()]
         [string] $flexContext = 'FLEXConnect'
     )
@@ -17,6 +17,11 @@ function Set-FLEXEchoDBClone {
 
     process {
       $dbNamesArray += $echoDatabaseName
+
+      if(!$snapshotId)
+        {
+          $snapshotId = $(Get-FLEXEchoHostDB -hostID $hostID -flexContext $flexContext | Where-Object -FilterScript {$_.name -eq $echoDatabaseName}).parent.snap_id
+        }
     }
 
     end {
