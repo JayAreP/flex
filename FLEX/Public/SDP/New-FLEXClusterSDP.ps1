@@ -12,7 +12,7 @@
     [int] (2,3,4,5,6,7,8) - Number of CNodes to create.
 
     .PARAMETER mnodeSize
-    [string] ('Large','Medium','Small') - Size of the MNode to deploy with the SDP. The actual size depends on Cloud Provider. 
+    [string] ('XXLarge','XLarge','Large','Medium','Small','XSmall') - Size of the MNode to deploy with the SDP. The actual size depends on Cloud Provider. 
 
     .PARAMETER minCnodes
     [int] (2,3,4,5,6,7,8) - Min number of CNodes for the SDP.
@@ -51,7 +51,7 @@ function New-FLEXClusterSDP {
         [ValidateSet(2,3,4,5,6,7,8)]
         [int] $cnodes,
         [parameter(Mandatory)]
-        [ValidateSet('Large','Medium', 'Small', IgnoreCase = $false)]
+        [ValidateSet('XXLarge','XLarge','Large','Medium','Small','XSmall', IgnoreCase = $false)]
         [string] $mnodeSize,
         [parameter()]
         [ValidateSet(2,3,4,5,6,7,8)]

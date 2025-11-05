@@ -3,7 +3,7 @@ function Add-FLEXClusterSDPMNode {
         [parameter(Mandatory)]
         [string] $sdpName,
         [parameter(Mandatory)]
-        [ValidateSet('Small', 'Medium', 'Large', IgnoreCase = $false)]
+        [ValidateSet('XXLarge','XLarge','Large','Medium','Small','XSmall', IgnoreCase = $false)]
         [string] $mnodeSize,
         [parameter()]
         [switch] $wait,
