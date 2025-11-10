@@ -1,11 +1,11 @@
-function Reset-FLEXEchoDBClone {
+function Set-FLEXEchoDBClone {
     param(
         [parameter(Mandatory,ValueFromPipelineByPropertyName)]
         [string] $echoDatabaseName,
         [parameter(Mandatory)]
-        [string] $snapshotId,
-        [parameter(Mandatory)]
         [string] $hostID,
+        [parameter()]
+        [string] $snapshotId,
         [parameter()]
         [string] $flexContext = 'FLEXConnect'
     )
@@ -17,7 +17,12 @@ function Reset-FLEXEchoDBClone {
 
     process {
       $dbNamesArray += $echoDatabaseName
-    } 
+
+      if(!$snapshotId)
+        {
+          $snapshotId = $(Get-FLEXEchoHostDB -hostID $hostID -flexContext $flexContext | Where-Object -FilterScript {$_.name -eq $echoDatabaseName}).parent.snap_id
+        }
+    }
 
     end {
       $o = New-Object psobject
@@ -25,7 +30,7 @@ function Reset-FLEXEchoDBClone {
       $o | Add-Member -MemberType NoteProperty -Name 'keep_backup' -Value $false
       $o | Add-Member -MemberType NoteProperty -Name 'snapshot_id' -Value $snapshotId
 
-      $results = Invoke-FLEXRestCall -API v1 -APIPrefix ocie -endpoint $endpoint -method POST -body $o -flexContext $flexContext 
+      $results = Invoke-FLEXRestCall -API v1 -APIPrefix ocie -endpoint $endpoint -method POST -body $o -flexContext $flexContext
       return $results
     }
 }
