@@ -14,7 +14,7 @@ function Remove-FLEXEchoDBClone {
 
     process {
 
-        $FLEXEchoDB = Get-FLEXEchoHostDB -hostID $hostID -flexContext $flexContext | ? id -eq $id
+        $FLEXEchoDB = Get-FLEXEchoHostDB -hostID $hostID -flexContext $flexContext | Where-Object -FilterScript { $_.parent -and $_.id -eq $id}
 
         $o = New-Object psobject
         $o | Add-Member -MemberType NoteProperty -Name 'host_id' -Value $hostID
