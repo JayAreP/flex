@@ -14,11 +14,11 @@ function Remove-FLEXEchoDBClone {
 
     process {
 
-        $FLEXEchoDBs = GET-FLEXEchoDBClone -id $id -flexContext $flexContext
+        $FLEXEchoDB = Get-FLEXEchoHostDB -hostID $hostID -flexContext $flexContext | Where-Object -FilterScript { $_.parent -and $_.id -eq $id}
 
         $o = New-Object psobject
         $o | Add-Member -MemberType NoteProperty -Name 'host_id' -Value $hostID
-        $o | Add-Member -MemberType NoteProperty -Name 'database_id' -Value $FLEXEchoDBs.id
+        $o | Add-Member -MemberType NoteProperty -Name 'database_id' -Value $FLEXEchoDB.id
 
         $result = invoke-flEXRestCall -API v1 -APIPrefix ocie -endpoint $endpoint -method DELETE -body $o -flexContext $flexContext
 
