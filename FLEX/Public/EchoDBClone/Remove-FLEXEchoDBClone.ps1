@@ -18,7 +18,7 @@ function Remove-FLEXEchoDBClone {
 
         $o = New-Object psobject
         $o | Add-Member -MemberType NoteProperty -Name 'host_id' -Value $hostID
-        $o | Add-Member -MemberType NoteProperty -Name 'database_id' -Value $id
+        $o | Add-Member -MemberType NoteProperty -Name 'database_id' -Value $FLEXEchoDB.id
 
         $result = invoke-flEXRestCall -API v1 -APIPrefix ocie -endpoint $endpoint -method DELETE -body $o -flexContext $flexContext
 
