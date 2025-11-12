@@ -3,7 +3,7 @@ function Remove-FLEXEchoDBClone {
         [parameter(Mandatory)]
         [string] $hostID,
         [parameter(Mandatory)]
-        [string] $id,
+        [string] $name,
         [parameter()]
         [string] $flexContext = 'FLEXConnect'
     )
@@ -14,7 +14,7 @@ function Remove-FLEXEchoDBClone {
 
     process {
 
-        $FLEXEchoDBs = GET-FLEXEchoDBClone -id $id -flexContext $flexContext
+        $FLEXEchoDBs = GET-FLEXEchoDBClone -name $name -flexContext $flexContext
 
         $o = New-Object psobject
         $o | Add-Member -MemberType NoteProperty -Name 'host_id' -Value $hostID
